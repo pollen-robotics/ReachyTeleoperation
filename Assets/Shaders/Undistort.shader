@@ -14,6 +14,9 @@ Shader "Unlit/Undistort"
         _k3("k3", Float) = 0
         _p1("p1", Float) = 0
         _p2("p2", Float) = 0
+
+        _rightTexOffsetX("rightTexOffsetX", Float) = 0
+        _rightTexOffsetY("rightTexOffsetY", Float) = 0
     }
     SubShader
     {
@@ -53,6 +56,8 @@ Shader "Unlit/Undistort"
             float _p1;
             float _p2;
             float2 _uvc;
+            float _rightTexOffsetX;
+            float _rightTexOffsetY;
 
             sampler2D _MainTex;
             sampler2D _MainTexRight;
@@ -100,14 +105,14 @@ Shader "Unlit/Undistort"
                     if(unity_StereoEyeIndex == 0)
                         return tex2D(_MainTex, i.uv)*_Color;
                     else
-                        return tex2D(_MainTexRight, i.uv)*_Color;
+                        return tex2D(_MainTexRight, i.uv + float2(_rightTexOffsetX, _rightTexOffsetY))*_Color;
                 } 
                 else 
                 {
                     if(unity_StereoEyeIndex == 0)
                         return tex2D(_MainTex, uvDistorted)*_Color;
                     else
-                        return tex2D(_MainTexRight, uvDistorted)*_Color;
+                        return tex2D(_MainTexRight, uvDistorted+ float2(_rightTexOffsetX, _rightTexOffsetY))*_Color;
                 }
             }
 
