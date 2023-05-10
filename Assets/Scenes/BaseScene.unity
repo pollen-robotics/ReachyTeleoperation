@@ -586,11 +586,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1440600536130867594, guid: 770664eca1f4897479c79fc61a6ab5f5,
         type: 3}
-      propertyPath: m_TargetEye
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1440600536130867594, guid: 770664eca1f4897479c79fc61a6ab5f5,
-        type: 3}
       propertyPath: near clip plane
       value: 0.01
       objectReference: {fileID: 0}
@@ -916,6 +911,7 @@ MonoBehaviour:
   event_DejaVu:
     m_PersistentCalls:
       m_Calls: []
+  audio: {fileID: 0}
 --- !u!1 &4826978605613812945
 GameObject:
   m_ObjectHideFlags: 0
