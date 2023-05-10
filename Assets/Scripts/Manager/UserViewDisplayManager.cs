@@ -21,14 +21,14 @@ namespace TeleopReachy
 
         [SerializeField]
         private GameObject prefabRightEyeCamera;
-        [SerializeField]
-        private GameObject prefabOfflineMenuRightEyeDisplayer;
+        // [SerializeField]
+        // private GameObject prefabOfflineMenuRightEyeDisplayer;
         [SerializeField]
         private GameObject prefabTeleoperationRightView;
 
         private GameObject rightCamera;
         private GameObject teleoperationRightView;
-        private GameObject offlineMenuRightEyeDisplayer;
+        // private GameObject offlineMenuRightEyeDisplayer;
 
         private RobotStatus robotStatus;
         private gRPCVideoController videoController;
@@ -81,9 +81,9 @@ namespace TeleopReachy
             rightCamera = (GameObject)Instantiate(prefabRightEyeCamera);
             teleoperationRightView = (GameObject)Instantiate(prefabTeleoperationRightView);
             teleoperationRightView.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
-            offlineMenuRightEyeDisplayer = (GameObject)Instantiate(prefabOfflineMenuRightEyeDisplayer);
-            offlineMenuRightEyeDisplayer.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
-            offlineMenuRightEyeDisplayer.GetComponent<Canvas>().planeDistance = 1.5f;
+            // offlineMenuRightEyeDisplayer = (GameObject)Instantiate(prefabOfflineMenuRightEyeDisplayer);
+            // offlineMenuRightEyeDisplayer.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
+            // offlineMenuRightEyeDisplayer.GetComponent<Canvas>().planeDistance = 1.5f;
             reachyRightEyeView = teleoperationRightView.transform.GetChild(0);
             rightEyeScript = reachyRightEyeView.GetComponent<RightEyeScript>();
             reachyRightEyeView.gameObject.SetActive(false);
@@ -97,10 +97,10 @@ namespace TeleopReachy
             {
                 Destroy(teleoperationRightView);
             }
-            if (offlineMenuRightEyeDisplayer != null)
-            {
-                Destroy(offlineMenuRightEyeDisplayer);
-            }
+            // if (offlineMenuRightEyeDisplayer != null)
+            // {
+            //     Destroy(offlineMenuRightEyeDisplayer);
+            // }
             
             if (rightCamera != null)
             {
