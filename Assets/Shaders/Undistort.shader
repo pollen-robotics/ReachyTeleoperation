@@ -3,6 +3,7 @@ Shader "Unlit/Undistort"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _MainTexRight ("TextureRight", 2D) = "white" {}
         _Color("Color", Color) = (1,1,1,1)
         _fx("fx", Float) = 0
         _fy("fy", Float) = 0
@@ -54,6 +55,7 @@ Shader "Unlit/Undistort"
             float2 _uvc;
 
             sampler2D _MainTex;
+            sampler2D _MainTexRight;
 
             v2f vertexFunc(appdata IN)
             {
@@ -95,11 +97,17 @@ Shader "Unlit/Undistort"
 
                 if (uvDistorted[0] < 0 || uvDistorted[0] > 1 || uvDistorted[1] < 0 || uvDistorted[1] > 1) 
                 {
-                    return tex2D(_MainTex, i.uv)*_Color;
+                    if(unity_StereoEyeIndex == 0)
+                        return tex2D(_MainTex, i.uv)*_Color;
+                    else
+                        return tex2D(_MainTexRight, i.uv)*_Color;
                 } 
                 else 
                 {
-                    return tex2D(_MainTex, uvDistorted)*_Color;
+                    if(unity_StereoEyeIndex == 0)
+                        return tex2D(_MainTex, uvDistorted)*_Color;
+                    else
+                        return tex2D(_MainTexRight, uvDistorted)*_Color;
                 }
             }
 

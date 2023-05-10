@@ -15,19 +15,19 @@ namespace TeleopReachy
         [SerializeField]
         private Transform reachyLeftEyeView;
         [SerializeField]
-        private Transform reachyRightEyeView;
+        // private Transform reachyRightEyeView;
 
         private LeftEyeScript leftEyeScript;
         private RightEyeScript rightEyeScript;
 
         [SerializeField]
-        private GameObject prefabRightEyeCamera;
+        // private GameObject prefabRightEyeCamera;
         // [SerializeField]
         // private GameObject prefabOfflineMenuRightEyeDisplayer;
         // [SerializeField]
         // private GameObject prefabTeleoperationRightView;
 
-        private GameObject rightCamera;
+        // private GameObject rightCamera;
         // private GameObject teleoperationRightView;
         // private GameObject offlineMenuRightEyeDisplayer;
 
@@ -63,7 +63,7 @@ namespace TeleopReachy
             {
                 // UnityEngine.Camera.main.stereoTargetEye = StereoTargetEyeMask.Left;
                 reachyLeftEyeView.gameObject.SetActive(true);
-                reachyRightEyeView.gameObject.SetActive(true);
+                // reachyRightEyeView.gameObject.SetActive(true);
             }
         }
 
@@ -71,15 +71,15 @@ namespace TeleopReachy
         {
             UnityEngine.Camera.main.stereoTargetEye = StereoTargetEyeMask.Both;
             reachyLeftEyeView.gameObject.SetActive(false);
-            if(!robotStatus.Is2DVisionModeOn())
-            {
-                reachyRightEyeView.gameObject.SetActive(false);
-            }
+            // if(!robotStatus.Is2DVisionModeOn())
+            // {
+            //     reachyRightEyeView.gameObject.SetActive(false);
+            // }
         }
 
         void SwitchTo3DMode()
         {
-            rightCamera = (GameObject)Instantiate(prefabRightEyeCamera);
+            // rightCamera = (GameObject)Instantiate(prefabRightEyeCamera);
             // reachyRightEyeView.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
             // teleoperationRightView = (GameObject)Instantiate(prefabTeleoperationRightView);
             // teleoperationRightView.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
@@ -104,10 +104,10 @@ namespace TeleopReachy
             //     Destroy(offlineMenuRightEyeDisplayer);
             // }
             
-            if (rightCamera != null)
-            {
-                Destroy(rightCamera);
-            }
+            // if (rightCamera != null)
+            // {
+            //     Destroy(rightCamera);
+            // }
         }
 
         void ModifyTextureTransparency(bool isRobotInVideoRoom)
