@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 1418938368526327885}
   - component: {fileID: 1418938368526327890}
   m_Layer: 11
-  m_Name: TeleoperationRightView
+  m_Name: TeleoperationRightView_old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

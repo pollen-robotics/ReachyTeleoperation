@@ -14,6 +14,7 @@ namespace TeleopReachy
     {
         [SerializeField]
         private Transform reachyLeftEyeView;
+        [SerializeField]
         private Transform reachyRightEyeView;
 
         private LeftEyeScript leftEyeScript;
@@ -23,11 +24,11 @@ namespace TeleopReachy
         private GameObject prefabRightEyeCamera;
         // [SerializeField]
         // private GameObject prefabOfflineMenuRightEyeDisplayer;
-        [SerializeField]
-        private GameObject prefabTeleoperationRightView;
+        // [SerializeField]
+        // private GameObject prefabTeleoperationRightView;
 
         private GameObject rightCamera;
-        private GameObject teleoperationRightView;
+        // private GameObject teleoperationRightView;
         // private GameObject offlineMenuRightEyeDisplayer;
 
         private RobotStatus robotStatus;
@@ -60,7 +61,7 @@ namespace TeleopReachy
             }
             else
             {
-                UnityEngine.Camera.main.stereoTargetEye = StereoTargetEyeMask.Left;
+                // UnityEngine.Camera.main.stereoTargetEye = StereoTargetEyeMask.Left;
                 reachyLeftEyeView.gameObject.SetActive(true);
                 reachyRightEyeView.gameObject.SetActive(true);
             }
@@ -79,24 +80,25 @@ namespace TeleopReachy
         void SwitchTo3DMode()
         {
             rightCamera = (GameObject)Instantiate(prefabRightEyeCamera);
-            teleoperationRightView = (GameObject)Instantiate(prefabTeleoperationRightView);
-            teleoperationRightView.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
+            // reachyRightEyeView.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
+            // teleoperationRightView = (GameObject)Instantiate(prefabTeleoperationRightView);
+            // teleoperationRightView.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
             // offlineMenuRightEyeDisplayer = (GameObject)Instantiate(prefabOfflineMenuRightEyeDisplayer);
             // offlineMenuRightEyeDisplayer.GetComponent<Canvas>().worldCamera = rightCamera.GetComponent<UnityEngine.Camera>();
             // offlineMenuRightEyeDisplayer.GetComponent<Canvas>().planeDistance = 1.5f;
-            reachyRightEyeView = teleoperationRightView.transform.GetChild(0);
-            rightEyeScript = reachyRightEyeView.GetComponent<RightEyeScript>();
-            reachyRightEyeView.gameObject.SetActive(false);
+            // reachyRightEyeView = teleoperationRightView.transform.GetChild(0);
+            // rightEyeScript = reachyRightEyeView.GetComponent<RightEyeScript>();
+            // reachyRightEyeView.gameObject.SetActive(false);
         }
 
         void SwitchTo2DMode()
         {
 
             Debug.Log("SwitchTo2DMode");
-            if (teleoperationRightView != null)
-            {
-                Destroy(teleoperationRightView);
-            }
+            // if (teleoperationRightView != null)
+            // {
+            //     Destroy(teleoperationRightView);
+            // }
             // if (offlineMenuRightEyeDisplayer != null)
             // {
             //     Destroy(offlineMenuRightEyeDisplayer);
