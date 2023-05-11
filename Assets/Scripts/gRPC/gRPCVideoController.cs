@@ -116,6 +116,7 @@ namespace TeleopReachy
 
                     leftEyeTexture.SetTexture("_MainTex", leftTexture);
                     leftEyeTexture.SetTexture("_MainTexRight", rightTexture);
+
                     ComputeMeanFPS();
                     needUpdateEyeImage = true;
                 }
@@ -140,7 +141,6 @@ namespace TeleopReachy
             {
                 if (needUpdateEyeImage)
                 {
-                    // Debug.LogError("GetBothImages");
                     needUpdateEyeImage = false;
                     var replyLeft = await client.GetImageAsync(new ImageRequest { Camera = new Reachy.Sdk.Camera.Camera { Id = CameraId.Left }, });
                     var replyRight = await client.GetImageAsync(new ImageRequest { Camera = new Reachy.Sdk.Camera.Camera { Id = CameraId.Right }, });
@@ -176,6 +176,7 @@ namespace TeleopReachy
             if (leftEyeTexture.mainTexture != defaultTexture)
             {
                 leftEyeTexture.mainTexture = defaultTexture;
+                leftEyeTexture.SetTexture("_MainTexRight", defaultTexture);
             }
         }
 

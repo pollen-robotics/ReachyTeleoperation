@@ -89,8 +89,8 @@ Material:
     - _k3: 0
     - _p1: 0
     - _p2: 0
-    - _rightTexOffsetX: 1.03
-    - _rightTexOffsetY: -0.08
+    - _rightTexOffsetX: 0
+    - _rightTexOffsetY: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
