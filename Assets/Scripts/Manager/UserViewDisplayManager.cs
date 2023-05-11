@@ -16,7 +16,6 @@ namespace TeleopReachy
         private Transform reachyEyeView;
 
         private EyeScript eyeScript;
-
         private RobotStatus robotStatus;
         private gRPCVideoController videoController;
 
