@@ -26,6 +26,10 @@ namespace TeleopReachy
             robotStatus.event_OnStartTeleoperation.AddListener(ShowReachyView);
             robotStatus.event_OnStopTeleoperation.AddListener(HideReachyView);
 
+
+            robotStatus.event_OnSwitchTo2DVision.AddListener(SwitchTo2DMode);
+            robotStatus.event_OnSwitchTo3DVision.AddListener(SwitchTo3DMode);
+
             videoController = gRPCManager.Instance.gRPCVideoController;
             videoController.event_OnVideoRoomStatusHasChanged.AddListener(ModifyTextureTransparency);
 
@@ -43,6 +47,16 @@ namespace TeleopReachy
         {
             UnityEngine.Camera.main.stereoTargetEye = StereoTargetEyeMask.Both;
             reachyEyeView.gameObject.SetActive(false);
+        }
+
+        void SwitchTo2DMode()
+        {
+            eyeScript.switchVisionMode(true);
+        }
+
+        void SwitchTo3DMode()
+        {
+            eyeScript.switchVisionMode(false);
         }
 
         void ModifyTextureTransparency(bool isRobotInVideoRoom)

@@ -87,8 +87,26 @@ Material:
     - _k1: 0
     - _k2: 0
     - _k3: 0
+    - _l_cx: 0
+    - _l_cy: 0
+    - _l_fx: 0
+    - _l_fy: 0
+    - _l_k1: 0
+    - _l_k2: 0
+    - _l_k3: 0
+    - _l_p1: 0
+    - _l_p2: 0
     - _p1: 0
     - _p2: 0
+    - _r_cx: 0
+    - _r_cy: 0
+    - _r_fx: 0
+    - _r_fy: 0
+    - _r_k1: 0
+    - _r_k2: 0
+    - _r_k3: 0
+    - _r_p1: 0
+    - _r_p2: 0
     - _rightTexOffsetX: 0
     - _rightTexOffsetY: 0
     m_Colors:
