@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 224850606}
   - component: {fileID: 224850609}
   m_Layer: 10
-  m_Name: ReachyLeftEyeViewQuad
+  m_Name: ReachyEyeViewQuad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1628,7 +1628,7 @@ GameObject:
   - component: {fileID: 621948027}
   - component: {fileID: 621948029}
   - component: {fileID: 621948028}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2128,7 +2128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rpcException: 
   leftEyeTexture: {fileID: 2100000, guid: f39d5f55597dea84fab92dddfe424377, type: 2}
-  rightEyeTexture: {fileID: 2100000, guid: f75498eac4dac804e896824a33f2a5e5, type: 2}
   defaultTexture: {fileID: 2800000, guid: beb6dc0e93392f64cb9e4d954c6a2ce3, type: 3}
   event_OnVideoRoomStatusHasChanged:
     m_PersistentCalls:
@@ -4239,13 +4238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d030d6d930e914194d58db55dc66de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reachyLeftEyeView: {fileID: 224850605}
-  prefabRightEyeCamera: {fileID: 8250274003561926860, guid: 8be1ee7ee82151a4d9e0e0763848e0c0,
-    type: 3}
-  prefabOfflineMenuRightEyeDisplayer: {fileID: 2784086350342040894, guid: c4b46ca105bb5d645a1512802afa1740,
-    type: 3}
-  prefabTeleoperationRightView: {fileID: 1418938368526327891, guid: 0d9cb3e276d36a646a74d42602085b98,
-    type: 3}
+  reachyEyeView: {fileID: 224850605}
 --- !u!1 &1631699611
 GameObject:
   m_ObjectHideFlags: 0
@@ -4617,7 +4610,7 @@ GameObject:
   - component: {fileID: 1876506748}
   - component: {fileID: 1876506747}
   m_Layer: 0
-  m_Name: TeleoperationLeftView
+  m_Name: TeleoperationView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5598,7 +5591,7 @@ GameObject:
   - component: {fileID: 6381839846574193473}
   - component: {fileID: 6381839846574193487}
   - component: {fileID: 6381839846574193486}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WarningText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5707,7 +5700,7 @@ GameObject:
   - component: {fileID: 6381839846723253368}
   - component: {fileID: 6381839846723253350}
   - component: {fileID: 4039092365260534009}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WarningMessageServiceDisconnected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5725,7 +5718,7 @@ GameObject:
   - component: {fileID: 6381839847025053886}
   - component: {fileID: 6381839847025053884}
   - component: {fileID: 6381839847025053887}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: RawImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

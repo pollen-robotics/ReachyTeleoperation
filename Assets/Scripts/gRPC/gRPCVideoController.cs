@@ -17,8 +17,6 @@ namespace TeleopReachy
 
         [SerializeField]
         private Material leftEyeTexture;
-        [SerializeField]
-        private Material rightEyeTexture;
 
         [SerializeField]
         private Texture defaultTexture;
@@ -104,6 +102,7 @@ namespace TeleopReachy
 
         public async void GetImage(CameraId side)
         {
+
             try
             {
                 if (needUpdateEyeImage)
@@ -112,16 +111,11 @@ namespace TeleopReachy
                     var reply = await client.GetImageAsync(new ImageRequest { Camera = new Reachy.Sdk.Camera.Camera { Id = side }, });
                     byte[] imageBytes = reply.Data.ToByteArray();
 
-                    if (side == CameraId.Left)
-                    {
-                        leftTexture.LoadImage(imageBytes);
-                        leftEyeTexture.mainTexture = leftTexture;
-                    }
-                    else
-                    {
-                        rightTexture.LoadImage(imageBytes);
-                        rightEyeTexture.mainTexture = rightTexture;
-                    }
+                    leftTexture.LoadImage(imageBytes);
+                    rightTexture.LoadImage(imageBytes);
+
+                    leftEyeTexture.SetTexture("_MainTex", leftTexture);
+                    leftEyeTexture.SetTexture("_MainTexRight", rightTexture);
 
                     ComputeMeanFPS();
                     needUpdateEyeImage = true;
@@ -155,9 +149,11 @@ namespace TeleopReachy
                     byte[] rightImageBytes = replyRight.Data.ToByteArray();
 
                     leftTexture.LoadImage(leftImageBytes);
-                    leftEyeTexture.mainTexture = leftTexture;
                     rightTexture.LoadImage(rightImageBytes);
-                    rightEyeTexture.mainTexture = rightTexture;
+
+                    leftEyeTexture.SetTexture("_MainTex", leftTexture);
+                    leftEyeTexture.SetTexture("_MainTexRight", rightTexture);
+
                     needUpdateEyeImage = true;
                 }
             }
@@ -180,6 +176,7 @@ namespace TeleopReachy
             if (leftEyeTexture.mainTexture != defaultTexture)
             {
                 leftEyeTexture.mainTexture = defaultTexture;
+                leftEyeTexture.SetTexture("_MainTexRight", defaultTexture);
             }
         }
 
