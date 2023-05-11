@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 224850606}
   - component: {fileID: 224850609}
   m_Layer: 10
-  m_Name: ReachyLeftEyeViewQuad
+  m_Name: ReachyEyeViewQuad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2128,7 +2128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rpcException: 
   leftEyeTexture: {fileID: 2100000, guid: f39d5f55597dea84fab92dddfe424377, type: 2}
-  rightEyeTexture: {fileID: 2100000, guid: f75498eac4dac804e896824a33f2a5e5, type: 2}
   defaultTexture: {fileID: 2800000, guid: beb6dc0e93392f64cb9e4d954c6a2ce3, type: 3}
   event_OnVideoRoomStatusHasChanged:
     m_PersistentCalls:
@@ -4239,10 +4238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d030d6d930e914194d58db55dc66de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reachyLeftEyeView: {fileID: 224850605}
-  reachyRightEyeView: {fileID: 0}
-  prefabRightEyeCamera: {fileID: 8250274003561926860, guid: 8be1ee7ee82151a4d9e0e0763848e0c0,
-    type: 3}
+  reachyEyeView: {fileID: 224850605}
 --- !u!1 &1631699611
 GameObject:
   m_ObjectHideFlags: 0

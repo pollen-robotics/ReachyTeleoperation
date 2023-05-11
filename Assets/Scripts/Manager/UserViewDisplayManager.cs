@@ -13,9 +13,9 @@ namespace TeleopReachy
     public class UserViewDisplayManager : MonoBehaviour
     {
         [SerializeField]
-        private Transform reachyLeftEyeView;
+        private Transform reachyEyeView;
 
-        private LeftEyeScript leftEyeScript;
+        private EyeScript eyeScript;
 
         private RobotStatus robotStatus;
         private gRPCVideoController videoController;
@@ -29,33 +29,33 @@ namespace TeleopReachy
             videoController = gRPCManager.Instance.gRPCVideoController;
             videoController.event_OnVideoRoomStatusHasChanged.AddListener(ModifyTextureTransparency);
 
-            leftEyeScript = reachyLeftEyeView.GetComponent<LeftEyeScript>();
+            eyeScript = reachyEyeView.GetComponent<EyeScript>();
 
-            reachyLeftEyeView.gameObject.SetActive(false);
+            reachyEyeView.gameObject.SetActive(false);
         }
 
         void ShowReachyView()
         {
-            reachyLeftEyeView.gameObject.SetActive(true);
+            reachyEyeView.gameObject.SetActive(true);
         }
 
         void HideReachyView()
         {
             UnityEngine.Camera.main.stereoTargetEye = StereoTargetEyeMask.Both;
-            reachyLeftEyeView.gameObject.SetActive(false);
+            reachyEyeView.gameObject.SetActive(false);
         }
 
         void ModifyTextureTransparency(bool isRobotInVideoRoom)
         {
             if(isRobotInVideoRoom)
             {
-                leftEyeScript.SetImageOpaque();
+                eyeScript.SetImageOpaque();
             }
             else
             {
                 if(robotStatus.IsRobotTeleoperationActive())
                 {
-                    leftEyeScript.SetImageTransparent();
+                    eyeScript.SetImageTransparent();
                 }
             }
         }

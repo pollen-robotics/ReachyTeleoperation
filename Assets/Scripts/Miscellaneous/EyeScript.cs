@@ -13,7 +13,7 @@ using Reachy.Sdk.Mobility;
 using Reachy.Sdk.Config;
 namespace TeleopReachy
 {
-    public class LeftEyeScript : MonoBehaviour
+    public class EyeScript : MonoBehaviour
     {
 
         private gRPCRobotParams robotParams;
