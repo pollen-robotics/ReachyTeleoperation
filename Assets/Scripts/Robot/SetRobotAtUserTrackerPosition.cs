@@ -16,7 +16,6 @@ namespace TeleopReachy
 
             transform.rotation = Quaternion.Euler(-90, userTrackerEulerAngles.y, 0);
             transform.position = userTrackerPosition;
-            Debug.Log(transform.position);
         }
     }
 }
