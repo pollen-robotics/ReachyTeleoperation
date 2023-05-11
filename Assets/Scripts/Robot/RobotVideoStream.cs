@@ -26,8 +26,14 @@ namespace TeleopReachy
 
         void Update()
         {
-            if(robotStatus.Is2DVisionModeOn()) videoController.GetImage(CameraId.Left);
-            else videoController.GetBothImages();
+            if(robotStatus.Is2DVisionModeOn()) 
+            {
+                videoController.GetImage(CameraId.Left);
+            }
+            else 
+            {
+                videoController.GetBothImages();
+            }
         }
 
     }

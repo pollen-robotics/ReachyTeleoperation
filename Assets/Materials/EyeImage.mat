@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RightEyeImage
+  m_Name: EyeImage
   m_Shader: {fileID: 4800000, guid: 63f27c31b53f36d4ea66472b5866060e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -40,6 +40,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexRight:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex_right:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -79,8 +87,28 @@ Material:
     - _k1: 0
     - _k2: 0
     - _k3: 0
+    - _l_cx: 0
+    - _l_cy: 0
+    - _l_fx: 0
+    - _l_fy: 0
+    - _l_k1: 0
+    - _l_k2: 0
+    - _l_k3: 0
+    - _l_p1: 0
+    - _l_p2: 0
     - _p1: 0
     - _p2: 0
+    - _r_cx: 0
+    - _r_cy: 0
+    - _r_fx: 0
+    - _r_fy: 0
+    - _r_k1: 0
+    - _r_k2: 0
+    - _r_k3: 0
+    - _r_p1: 0
+    - _r_p2: 0
+    - _rightTexOffsetX: 0
+    - _rightTexOffsetY: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

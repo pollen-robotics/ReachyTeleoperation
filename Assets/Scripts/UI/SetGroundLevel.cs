@@ -17,7 +17,6 @@ namespace TeleopReachy
         {
             Vector3 userTrackerPosition = UserTrackerManager.Instance.transform.position; // - transform.forward * 0.1f;
             transform.position = new Vector3(transform.position.x, userTrackerPosition.y - 1.25f, transform.position.z);
-            Debug.Log(transform.position);
         }
     }
 }
