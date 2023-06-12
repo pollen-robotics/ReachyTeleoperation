@@ -11,6 +11,8 @@ using Google.Protobuf.WellKnownTypes;
 
 using Reachy.Sdk.Mobility;
 using Reachy.Sdk.Config;
+using System.Globalization;
+
 namespace TeleopReachy
 {
     public class EyeScript : MonoBehaviour
@@ -21,38 +23,87 @@ namespace TeleopReachy
         private Channel channel;
         private ConfigService.ConfigServiceClient configService;
 
+        private Texture2D l_mapX;
+        private Texture2D l_mapY;
+        
+        private Texture2D r_mapX;
+        private Texture2D r_mapY;
+
         private bool needCameraParameterUpdate = false;
         private bool needColorUpdate = false;
 
         Renderer rend;
 
-        float l_fx = 0;
-        float l_fy = 0;
-        float l_cx = 0;
-        float l_cy = 0;
-        float l_k1 = 0;
-        float l_k2 = 0;
-        float l_k3 = 0;
-        float l_p1 = 0;
-        float l_p2 = 0;
-
-        float r_fx = 0;
-        float r_fy = 0;
-        float r_cx = 0;
-        float r_cy = 0;
-        float r_k1 = 0;
-        float r_k2 = 0;
-        float r_k3 = 0;
-        float r_p1 = 0;
-        float r_p2 = 0;
-
-        public float rightTexOffsetX = 0;
-        public float rightTexOffsetY = 0;
-
         float alpha = 1.0f;
 
         void Start()
         {        
+            rend = GetComponent<Renderer> ();
+            
+            l_mapX = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
+            l_mapY = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
+            r_mapX = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
+            r_mapY = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
+
+            TextAsset l_mapx_txt = Resources.Load<TextAsset>("L_mapx");
+            TextAsset l_mapy_txt = Resources.Load<TextAsset>("L_mapy");
+            TextAsset r_mapx_txt = Resources.Load<TextAsset>("R_mapx");
+            TextAsset r_mapy_txt = Resources.Load<TextAsset>("R_mapy");
+
+            var dataLines = l_mapx_txt.text.Split('\n');
+            for(int j = 1; j < dataLines.Length; j++) {
+                var data = dataLines[j].Split(',');
+                for(int i = 1; i < data.Length; i++) {
+                    string str_val = data[i];
+                    float float_val = float.Parse(str_val.ToString(), CultureInfo.InvariantCulture);
+                    Color c = new Color(float_val/data.Length, 0f, 0f);
+                    l_mapX.SetPixel(i-1, j-1, c);
+                }
+            }
+
+            dataLines = l_mapy_txt.text.Split('\n');
+            for(int j = 1; j < dataLines.Length; j++) {
+                var data = dataLines[j].Split(',');
+                for(int i = 1; i < data.Length; i++) {
+                    string str_val = data[i];
+                    float float_val = float.Parse(str_val.ToString(), CultureInfo.InvariantCulture);
+                    Color c = new Color(float_val/dataLines.Length, 0f, 0f);
+                    l_mapY.SetPixel(i-1, j-1, c);
+                }
+            }
+
+            dataLines = r_mapx_txt.text.Split('\n');
+            for(int j = 1; j < dataLines.Length; j++) {
+                var data = dataLines[j].Split(',');
+                for(int i = 1; i < data.Length; i++) {
+                    string str_val = data[i];
+                    float float_val = float.Parse(str_val.ToString(), CultureInfo.InvariantCulture);
+                    Color c = new Color(float_val/dataLines.Length, 0f, 0f);
+                    r_mapX.SetPixel(i-1, j-1, c);
+                }
+            }
+
+            dataLines = r_mapy_txt.text.Split('\n');
+            for(int j = 1; j < dataLines.Length; j++) {
+                var data = dataLines[j].Split(',');
+                for(int i = 1; i < data.Length; i++) {
+                    string str_val = data[i];
+                    float float_val = float.Parse(str_val.ToString(), CultureInfo.InvariantCulture);
+                    Color c = new Color(float_val/dataLines.Length, 0f, 0f);
+                    r_mapY.SetPixel(i-1, j-1, c);
+                }
+            }
+            
+            l_mapX.Apply();
+            l_mapY.Apply();
+            r_mapX.Apply();
+            r_mapY.Apply();
+
+            rend.material.SetTexture("_l_MapX", l_mapX);
+            rend.material.SetTexture("_l_MapY", l_mapY);
+            rend.material.SetTexture("_r_MapX", r_mapX);
+            rend.material.SetTexture("_r_MapY", r_mapY);
+
             gRPCManager.Instance.gRPCRobotParams.event_OnRobotGenerationReceived.AddListener(setCameraParams);
             robotStatus = RobotDataManager.Instance.RobotStatus;
         }
@@ -74,17 +125,6 @@ namespace TeleopReachy
 
         public void switchVisionMode(bool mode2d)
         {
-            if (mode2d)
-            {
-                rightTexOffsetX = 0f;
-                rightTexOffsetY = 0f;
-            }
-            else
-            {
-                rightTexOffsetX = 1.03f;
-                rightTexOffsetY = -0.08f;
-
-            }
             needCameraParameterUpdate = true;
             Update();
         }
@@ -106,71 +146,12 @@ namespace TeleopReachy
             if (needCameraParameterUpdate)
             {
 
-                string ip_address = PlayerPrefs.GetString("robot_ip");
-                string addressData = ip_address + ":" + PlayerPrefs.GetString("server_data_port");
-                Channel channelData = new Channel(addressData, ChannelCredentials.Insecure);
-                configService = new ConfigService.ConfigServiceClient(channelData);
-
-                
-                float[] camera_parameters = new float[18];
-                var i = 0;
-                foreach (var param in configService.GetReachyConfig(new Google.Protobuf.WellKnownTypes.Empty()).CameraParameters)
-                {
-
-                    camera_parameters[i] = param;
-                    i ++;
-                }
-
-                l_cx = camera_parameters[0];
-                l_cy = camera_parameters[1];
-                l_fx = camera_parameters[2];
-                l_fy = camera_parameters[3];
-                l_k1 = camera_parameters[4];
-                l_k2 = camera_parameters[5];
-                l_k3 = camera_parameters[6];
-                l_p1 = camera_parameters[7];
-                l_p2 = camera_parameters[8];
-
-                r_cx = camera_parameters[9];
-                r_cy = camera_parameters[10];
-                r_fx = camera_parameters[11];
-                r_fy = camera_parameters[12];
-                r_k1 = camera_parameters[13];
-                r_k2 = camera_parameters[14];
-                r_k3 = camera_parameters[15];
-                r_p1 = camera_parameters[17];
-                r_p2 = camera_parameters[17];
-
-                rend = GetComponent<Renderer> ();
-                rend.material.SetFloat("_l_fx", l_fx);
-                rend.material.SetFloat("_l_fy", l_fy);
-                rend.material.SetFloat("_l_cx", l_cx);
-                rend.material.SetFloat("_l_cy", l_cy);
-                rend.material.SetFloat("_l_k1", l_k1);
-                rend.material.SetFloat("_l_k2", l_k2);
-                rend.material.SetFloat("_l_k3", l_k3);
-                rend.material.SetFloat("_l_p1", l_p1);
-                rend.material.SetFloat("_l_p2", l_p2);
-
-                rend.material.SetFloat("_r_fx", r_fx);
-                rend.material.SetFloat("_r_fy", r_fy);
-                rend.material.SetFloat("_r_cx", r_cx);
-                rend.material.SetFloat("_r_cy", r_cy);
-                rend.material.SetFloat("_r_k1", r_k1);
-                rend.material.SetFloat("_r_k2", r_k2);
-                rend.material.SetFloat("_r_k3", r_k3);
-                rend.material.SetFloat("_r_p1", r_p1);
-                rend.material.SetFloat("_r_p2", r_p2);
-
-                rend.material.SetFloat("_rightTexOffsetX", rightTexOffsetX);
-                rend.material.SetFloat("_rightTexOffsetY", rightTexOffsetY);
-
+                // TODO
                 needCameraParameterUpdate = false;
             }
 
             if (needColorUpdate)
             {
-                rend = GetComponent<Renderer> ();
                 Color color = new Color(1, 1, 1, alpha);
                 rend.material.SetColor("_Color", color);
                 needColorUpdate = false;
