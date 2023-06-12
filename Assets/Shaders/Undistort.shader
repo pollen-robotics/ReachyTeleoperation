@@ -14,9 +14,10 @@ Shader "Unlit/Undistort"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        Blend SrcAlpha OneMinusSrcAlpha
-        ZWrite off
+        // Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        // Blend SrcAlpha OneMinusSrcAlpha
+        // ZWrite off
+        Tags { "RenderType" = "Opaque" }
         Pass
         {
             
@@ -49,8 +50,6 @@ Shader "Unlit/Undistort"
             sampler2D_float _r_MapX;
             sampler2D_float _r_MapY;
 
-            float2 xy;
-
             v2f vertexFunc(appdata IN)
             {
                 v2f OUT;
@@ -64,15 +63,17 @@ Shader "Unlit/Undistort"
 
                 if(unity_StereoEyeIndex == 0) // Left eye
                 {
+                    float2 xy;
                     xy[0] = tex2D(_l_MapX, i.uv)[0];
                     xy[1] = tex2D(_l_MapY, i.uv)[0];
 
                     return tex2D(_MainTex, xy)*_Color;
                 }
                 else // Right eye
-                {                    
-                    xy[0] = tex2D(_l_MapX, i.uv)[0];
-                    xy[1] = tex2D(_l_MapY, i.uv)[0];
+                {         
+                    float2 xy;           
+                    xy[0] = tex2D(_r_MapX, i.uv)[0];
+                    xy[1] = tex2D(_r_MapY, i.uv)[0];
 
                     return tex2D(_MainTexRight, xy)*_Color;
                 }

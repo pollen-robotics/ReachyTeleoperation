@@ -38,8 +38,8 @@ namespace TeleopReachy
 
         void Start()
         {        
-            rend = GetComponent<Renderer> ();
-            
+            rend = GetComponent<Renderer>();
+
             l_mapX = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
             l_mapY = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
             r_mapX = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);

@@ -71,6 +71,7 @@ namespace TeleopReachy
             if (robotConfig.HasHead())
             {
                 isInteractable2D = true;
+                isInteractable3D = true; // TODO remove this
                 if (robotConfig.RobotGeneration == RobotGenerationCode.V2023)
                     isInteractable3D = true;
             }
