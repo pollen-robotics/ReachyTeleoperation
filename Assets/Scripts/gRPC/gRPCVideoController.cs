@@ -16,7 +16,7 @@ namespace TeleopReachy
         private Texture2D rightTexture;
 
         [SerializeField]
-        private Material leftEyeTexture;
+        public Material leftEyeTexture;
 
         [SerializeField]
         private Texture defaultTexture;

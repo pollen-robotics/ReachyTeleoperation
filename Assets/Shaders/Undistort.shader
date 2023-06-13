@@ -14,10 +14,9 @@ Shader "Unlit/Undistort"
     }
     SubShader
     {
-        // Tags { "RenderType"="Transparent" "Queue"="Transparent" }
-        // Blend SrcAlpha OneMinusSrcAlpha
-        // ZWrite off
-        Tags { "RenderType" = "Opaque" }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite off
         Pass
         {
             

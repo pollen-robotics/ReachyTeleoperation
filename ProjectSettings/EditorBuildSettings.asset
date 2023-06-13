@@ -18,13 +18,13 @@ EditorBuildSettings:
     path: Assets/Scenes/MirrorScene.unity
     guid: e4791a46b24fba844ad2bf64bc08b164
   m_configObjects:
-    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 36963c52c02ea2e4ea553b41b93338c0,
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 7d5625458b298c1448c821a13f9d9589,
       type: 2}
-    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 7ea6fe12418d246469db0bb6ae5c80a3,
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: bd13aa54da2b1f94f92fa32d9fe07465,
       type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: ea7fc94758f078e4d997bea81b41c8bd,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2cd7f6577fe8f264e9f98ca1586942db,
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d669745affd76614dbbd9365465483cf,
       type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: f095b85971f12684996b6dafd9e32373,
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2bcf50ca7a335ea40b37e3bcf05eea52,
       type: 2}

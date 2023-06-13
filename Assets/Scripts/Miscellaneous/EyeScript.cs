@@ -23,22 +23,25 @@ namespace TeleopReachy
         private Channel channel;
         private ConfigService.ConfigServiceClient configService;
 
-        private Texture2D l_mapX;
-        private Texture2D l_mapY;
+        public Texture2D l_mapX;
+        public Texture2D l_mapY;
         
-        private Texture2D r_mapX;
-        private Texture2D r_mapY;
+        public Texture2D r_mapX;
+        public Texture2D r_mapY;
 
         private bool needCameraParameterUpdate = false;
         private bool needColorUpdate = false;
 
-        Renderer rend;
+        // get leftEyeTexture instance from grpcvideocontroller
+        public Material leftEyeTexture;
+
 
         float alpha = 1.0f;
 
         void Start()
         {        
-            rend = GetComponent<Renderer>();
+            
+            leftEyeTexture = gRPCManager.Instance.gRPCVideoController.leftEyeTexture;
 
             l_mapX = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
             l_mapY = new Texture2D(480, 640, TextureFormat.RGBAFloat, false);
@@ -99,13 +102,11 @@ namespace TeleopReachy
             r_mapX.Apply();
             r_mapY.Apply();
 
-            rend.material.SetTexture("_l_MapX", l_mapX);
-            rend.material.SetTexture("_l_MapY", l_mapY);
-            rend.material.SetTexture("_r_MapX", r_mapX);
-            rend.material.SetTexture("_r_MapY", r_mapY);
-
             gRPCManager.Instance.gRPCRobotParams.event_OnRobotGenerationReceived.AddListener(setCameraParams);
             robotStatus = RobotDataManager.Instance.RobotStatus;
+
+            needCameraParameterUpdate = true;
+            Update();
         }
 
         private void setCameraParams()
@@ -145,15 +146,18 @@ namespace TeleopReachy
         {
             if (needCameraParameterUpdate)
             {
-
-                // TODO
+                // Ca fait buger le truc ?
+                leftEyeTexture.SetTexture("_l_MapX", l_mapX);
+                leftEyeTexture.SetTexture("_l_MapY", l_mapY);
+                leftEyeTexture.SetTexture("_r_MapX", r_mapX);
+                leftEyeTexture.SetTexture("_r_MapY", r_mapY);
                 needCameraParameterUpdate = false;
             }
 
             if (needColorUpdate)
             {
                 Color color = new Color(1, 1, 1, alpha);
-                rend.material.SetColor("_Color", color);
+                leftEyeTexture.SetColor("_Color", color);
                 needColorUpdate = false;
             }
         }
