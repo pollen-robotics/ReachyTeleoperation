@@ -28,7 +28,7 @@ Download the [grpc_unity_package](https://packages.grpc.io/archive/2022/04/67538
 
 ## Usage
 
-Teleoperating a robot takes place in three basic steps.  The detailed documentation is [here](https://docs.pollen-robotics.com/vr/introduction/introduction/).
+Teleoperating a robot takes place in three basic steps:
 
 ### 1. Connect to a robot
 
