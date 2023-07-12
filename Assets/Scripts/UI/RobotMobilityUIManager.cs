@@ -131,7 +131,7 @@ namespace TeleopReachy
                 directionLeft = userMobilityInput.GetMobileBaseDirection();
                 directionRight = userMobilityInput.GetAngleDirection();
 
-                float rotation = Mathf.Atan2(directionRight[1], directionRight[0]);
+                float rotation = -directionRight[0];
 
                 arrowRightRotationCommand.gameObject.SetActive(rotation < 0);
                 arrowLeftRotationCommand.gameObject.SetActive(rotation > 0);
