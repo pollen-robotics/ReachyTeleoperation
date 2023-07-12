@@ -12,6 +12,7 @@ namespace TeleopReachy
 
         private const string primLeftButton = "<primLeft>";
         private const string primRightButton = "<primRight>";
+        private const string miniPrimRightButton = "<miniPrimRight>";
 
         // Start is called before the first frame update
         void Start()
@@ -28,18 +29,21 @@ namespace TeleopReachy
                 case ControllersManager.SupportedDevices.Oculus:
                     {
                         stringToChange = stringToChange.Replace(primRightButton, "A");
+                        stringToChange = stringToChange.Replace(miniPrimRightButton, "A");
                         stringToChange = stringToChange.Replace(primLeftButton, "X");
                         break;
                     }
                 case ControllersManager.SupportedDevices.HTCVive:
                     {
-                        stringToChange = stringToChange.Replace(primRightButton, "Right menu");
-                        stringToChange = stringToChange.Replace(primLeftButton, "Left menu");
+                        stringToChange = stringToChange.Replace(primRightButton, "Right menu ☰");
+                        stringToChange = stringToChange.Replace(miniPrimRightButton, "☰");
+                        stringToChange = stringToChange.Replace(primLeftButton, "Left menu ☰");
                         break;
                     }
                 case ControllersManager.SupportedDevices.ValveIndex:
                     {
                         stringToChange = stringToChange.Replace(primRightButton, "Right A");
+                        stringToChange = stringToChange.Replace(miniPrimRightButton, "A");
                         stringToChange = stringToChange.Replace(primLeftButton, "Left A");
                         break;
                     }
