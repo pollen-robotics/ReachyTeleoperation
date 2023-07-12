@@ -30,3 +30,4 @@ presse-papiers.png https://www.flaticon.com/free-icon/list_2285516?related_id=22
 Right-Arrow.png Right-Arrow-white.png https://www.flaticon.com/free-icon/right-arrow_98702
 up-arrow-white.png https://www.flaticon.com/free-icon/up-arrow_2351966?term=up+arrow&page=1&position=2&origin=search&related_id=2351966
 vue.png https://www.flaticon.com/free-icon/eye_2531412?term=eye&page=1&position=58&origin=search&related_id=2531412
+info.png https://www.flaticon.com/fr/icone-gratuite/soutien_9220622?term=information&page=1&position=8&origin=tag&related_id=9220622

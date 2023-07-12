@@ -592,7 +592,7 @@ PrefabInstance:
     - target: {fileID: 1440600536130867594, guid: 770664eca1f4897479c79fc61a6ab5f5,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 9847
+      value: 58999
       objectReference: {fileID: 0}
     - target: {fileID: 1440600536458432837, guid: 770664eca1f4897479c79fc61a6ab5f5,
         type: 3}
@@ -911,7 +911,6 @@ MonoBehaviour:
   event_DejaVu:
     m_PersistentCalls:
       m_Calls: []
-  audio: {fileID: 0}
 --- !u!1 &4826978605613812945
 GameObject:
   m_ObjectHideFlags: 0

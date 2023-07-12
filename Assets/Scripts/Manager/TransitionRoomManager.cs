@@ -63,8 +63,6 @@ namespace TeleopReachy
 
             resetPositionButton.gameObject.SetActive(false);
 
-            EventManager.StartListening(EventNames.HeadsetReset, ResetPosition);
-
             robotConfig = RobotDataManager.Instance.RobotConfig;
             robotStatus = RobotDataManager.Instance.RobotStatus;
 
@@ -82,7 +80,7 @@ namespace TeleopReachy
             }
         }
 
-        private void ResetPosition()
+        public void ResetPosition()
         {
             FixUserTrackerPosition();
             MakeMirrorFaceUser();

@@ -55,6 +55,9 @@ namespace TeleopReachy
             bool leftPrimaryButtonPressed = false;
             controllers.leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out leftPrimaryButtonPressed);
 
+            Vector2 leftJoystickValue;
+            controllers.leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out leftJoystickValue);
+
             if (robotStatus.IsRobotTeleoperationActive() && !robotStatus.AreRobotMovementsSuspended())
             {
                 if (rightPrimaryButtonPressed && !rightPrimaryButtonPreviouslyPressed)
@@ -71,7 +74,17 @@ namespace TeleopReachy
                 {
                     if (rightPrimaryButtonPressed && rightPrimaryButtonPreviouslyPressed)
                     {
-                        indicatorTimer += Time.deltaTime / 2;
+                        float r = Mathf.Sqrt(Mathf.Pow(leftJoystickValue[0], 2) + Mathf.Pow(leftJoystickValue[1], 2));
+
+                        if(r != 0)
+                        {
+                            indicatorTimer += Time.deltaTime * 2 * r;
+                        }
+                        else 
+                        {
+                            indicatorTimer += Time.deltaTime / 2;
+                        }
+
                         if (indicatorTimer >= 1.0f)
                         {
                             ExitOffLineMenu();
