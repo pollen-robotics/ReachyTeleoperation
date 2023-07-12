@@ -30,19 +30,19 @@ namespace TeleopReachy
 
             if(ControllersManager.Instance.controllerDeviceType == ControllersManager.SupportedDevices.ValveIndex)
             {
-                transform.localPosition = new Vector3(0, -0.05f, 0);
+                transform.localPosition = new Vector3(0, 0, 0);
                 UnityEngine.Quaternion targetRotation = new UnityEngine.Quaternion();
-                if(side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(-60, 30, 0);
-                else targetRotation.eulerAngles = new Vector3(-60, -30, 0);
+                if(side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(0, 0, 20);
+                else targetRotation.eulerAngles = new Vector3(0, 0, -20);
                 transform.rotation = targetRotation;
             }
 
             if(ControllersManager.Instance.controllerDeviceType == ControllersManager.SupportedDevices.HTCVive)
             {
-                transform.localPosition = new Vector3(0, -0.05f, 0);
+                transform.localPosition = new Vector3(0, 0, 0);
                 UnityEngine.Quaternion targetRotation = new UnityEngine.Quaternion();
-                if(side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(-60, 30, 0);
-                else targetRotation.eulerAngles = new Vector3(-60, -30, 0);
+                if(side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(0, 0, 0);
+                else targetRotation.eulerAngles = new Vector3(0, 0, 0);
                 transform.rotation = targetRotation;
             }
         }
