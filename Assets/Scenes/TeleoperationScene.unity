@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 65323611}
   - component: {fileID: 65323613}
   - component: {fileID: 65323612}
+  - component: {fileID: 65323614}
   m_Layer: 6
   m_Name: AText
   m_TagString: Untagged
@@ -478,7 +479,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A
+  m_Text: <primRight>
 --- !u!222 &65323613
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -487,6 +488,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 65323610}
   m_CullTransparentMesh: 0
+--- !u!114 &65323614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 65323610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!1 &67668666
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,6 +587,7 @@ GameObject:
   - component: {fileID: 98349719}
   - component: {fileID: 98349721}
   - component: {fileID: 98349720}
+  - component: {fileID: 98349722}
   m_Layer: 6
   m_Name: Text
   m_TagString: Untagged
@@ -632,7 +647,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press A to leave teleoperation anytime
+  m_Text: Press <primRight> to leave teleoperation anytime
 --- !u!222 &98349721
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -641,6 +656,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 98349718}
   m_CullTransparentMesh: 1
+--- !u!114 &98349722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98349718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!1 &100821912
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,6 +924,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f093a8021ce9bc443a5de613579a73ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rightTexOffsetX: 0
+  rightTexOffsetY: 0
 --- !u!1 &258652890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,6 +2032,7 @@ GameObject:
   - component: {fileID: 814315994}
   - component: {fileID: 814315996}
   - component: {fileID: 814315995}
+  - component: {fileID: 814315997}
   m_Layer: 5
   m_Name: UsualUserTipText
   m_TagString: Untagged
@@ -2061,7 +2092,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold X on the left controller to lock the robot's position
+  m_Text: Hold <primLeft> on the left controller to lock the robot's position
 --- !u!222 &814315996
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2070,6 +2101,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 814315993}
   m_CullTransparentMesh: 0
+--- !u!114 &814315997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814315993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!1 &888243800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,6 +2275,7 @@ GameObject:
   - component: {fileID: 931182628}
   - component: {fileID: 931182630}
   - component: {fileID: 931182629}
+  - component: {fileID: 931182631}
   m_Layer: 6
   m_Name: Text
   m_TagString: Untagged
@@ -2290,7 +2335,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hold A to go back to transition room
+  m_Text: Hold <primRight> to go back to transition room
 --- !u!222 &931182630
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2299,6 +2344,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931182627}
   m_CullTransparentMesh: 1
+--- !u!114 &931182631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931182627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!1 &934711108
 GameObject:
   m_ObjectHideFlags: 0
@@ -4763,6 +4821,7 @@ GameObject:
   - component: {fileID: 2005160554}
   - component: {fileID: 2005160556}
   - component: {fileID: 2005160555}
+  - component: {fileID: 2005160557}
   m_Layer: 0
   m_Name: Cancel
   m_TagString: Untagged
@@ -4822,7 +4881,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Release A to cancel
+  m_Text: 'Release <primRight> to cancel
 
 '
 --- !u!222 &2005160556
@@ -4833,6 +4892,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005160553}
   m_CullTransparentMesh: 1
+--- !u!114 &2005160557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005160553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!1 &2011720377
 GameObject:
   m_ObjectHideFlags: 0

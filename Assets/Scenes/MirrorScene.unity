@@ -11763,6 +11763,7 @@ GameObject:
   - component: {fileID: 4575489515849911134}
   - component: {fileID: 4575489515849911105}
   - component: {fileID: 4575489515849911108}
+  - component: {fileID: 4575489515849911109}
   m_Layer: 5
   m_Name: InstructionsText
   m_TagString: Untagged
@@ -11783,6 +11784,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instructionsDetails: {fileID: 449329030}
+--- !u!114 &4575489515849911109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4575489515849911107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!222 &4575489515849911134
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13248,6 +13262,7 @@ GameObject:
   - component: {fileID: 4575489517037910241}
   - component: {fileID: 4575489517037910271}
   - component: {fileID: 4575489517037910270}
+  - component: {fileID: 4575489517037910242}
   m_Layer: 5
   m_Name: AText
   m_TagString: Untagged
@@ -13274,6 +13289,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 672.4677, y: 534.2798}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4575489517037910242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4575489517037910240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c83bcfda882ac4599c40215f07d311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllers: {fileID: 0}
 --- !u!114 &4575489517037910270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13307,7 +13335,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: A
+  m_Text: <primRight>
 --- !u!222 &4575489517037910271
 CanvasRenderer:
   m_ObjectHideFlags: 0
