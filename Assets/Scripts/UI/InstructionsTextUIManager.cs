@@ -58,7 +58,7 @@ namespace TeleopReachy
 
         void IndicateToPressA()
         {
-            instructionsText = "Press and hold <primRight> to start";
+            instructionsText = "Press and hold " + textButtonControllerModifier.GetPrimRightButtonName() + " to start";
             instructionsText = textButtonControllerModifier.ChangeTextAccordingToController(instructionsText);
             instructionsDetailsText = "";
             needUpdateText = true;

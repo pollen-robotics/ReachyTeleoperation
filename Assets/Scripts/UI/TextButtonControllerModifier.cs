@@ -9,6 +9,10 @@ namespace TeleopReachy
     {
         private Text textToChange;
         public ControllersManager controllers;
+
+        private const string primLeftButton = "<primLeft>";
+        private const string primRightButton = "<primRight>";
+
         // Start is called before the first frame update
         void Start()
         {
@@ -23,24 +27,29 @@ namespace TeleopReachy
             {
                 case ControllersManager.SupportedDevices.Oculus:
                     {
-                        stringToChange = stringToChange.Replace("<primRight>", "A");
-                        stringToChange = stringToChange.Replace("<primLeft>", "X");
+                        stringToChange = stringToChange.Replace(primRightButton, "A");
+                        stringToChange = stringToChange.Replace(primLeftButton, "X");
                         break;
                     }
                 case ControllersManager.SupportedDevices.HTCVive:
                     {
-                        stringToChange = stringToChange.Replace("<primRight>", "Right menu");
-                        stringToChange = stringToChange.Replace("<primLeft>", "Left menu");
+                        stringToChange = stringToChange.Replace(primRightButton, "Right menu");
+                        stringToChange = stringToChange.Replace(primLeftButton, "Left menu");
                         break;
                     }
                 case ControllersManager.SupportedDevices.ValveIndex:
                     {
-                        stringToChange = stringToChange.Replace("<primRight>", "Right A");
-                        stringToChange = stringToChange.Replace("<primLeft>", "Left A");
+                        stringToChange = stringToChange.Replace(primRightButton, "Right A");
+                        stringToChange = stringToChange.Replace(primLeftButton, "Left A");
                         break;
                     }
             }
             return stringToChange;
         }
+        public string GetPrimRightButtonName()
+        {
+            return primRightButton;
+        }
     }
+
 }
