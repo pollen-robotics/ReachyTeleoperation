@@ -2435,7 +2435,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -119.8}
-  m_SizeDelta: {x: 200, y: 60.9668}
+  m_SizeDelta: {x: 217.6435, y: 60.9668}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &931182629
 MonoBehaviour:
@@ -4980,8 +4980,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 1.83, y: -6.26}
-  m_SizeDelta: {x: 100, y: 50}
+  m_AnchoredPosition: {x: -2.3574924, y: -6.26}
+  m_SizeDelta: {x: 283.0035, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2005160555
 MonoBehaviour:
@@ -5016,9 +5016,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Release <primRight> to cancel
-
-'
+  m_Text: "Release <primRight> \nto cancel\n"
 --- !u!222 &2005160556
 CanvasRenderer:
   m_ObjectHideFlags: 0

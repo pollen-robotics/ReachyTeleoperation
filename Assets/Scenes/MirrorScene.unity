@@ -5172,8 +5172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   oculusAInputImage: {fileID: 2800000, guid: 21fefa3ddeccbeb40a58743f40437dd6, type: 3}
-  viveAInputImage: {fileID: 2800000, guid: 187f3a65afaded942b564c47383923fe, type: 3}
-  valveAInputImage: {fileID: 2800000, guid: f72ae9a4629ccc64797ac8b15979bc90, type: 3}
+  viveAInputImage: {fileID: 2800000, guid: 62a81a8ceef49984db6836488b8b4e8e, type: 3}
+  valveAInputImage: {fileID: 2800000, guid: 187f3a65afaded942b564c47383923fe, type: 3}
 --- !u!1 &867196953
 GameObject:
   m_ObjectHideFlags: 0
@@ -12846,8 +12846,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.173}
-  m_SizeDelta: {x: 3274.39, y: 791.02}
+  m_AnchoredPosition: {x: -0.0708, y: 0.173}
+  m_SizeDelta: {x: 2887.4539, y: 791.02}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4575489515849911105
 MonoBehaviour:
@@ -14051,7 +14051,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.222}
+  m_AnchoredPosition: {x: 0, y: -0.229}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &4575489516762864600
@@ -14467,7 +14467,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: <primRight>
+  m_Text: <miniPrimRight>
 --- !u!222 &4575489517037910271
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14766,7 +14766,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.006}
   m_SizeDelta: {x: 9, y: 9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4575489517378876897
@@ -16285,7 +16285,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The server is not responding, or you may not be connected to the right address.
+  m_Text: The server is not responding, or you may not be connected to the right
+    address.
 --- !u!222 &8185852573611614355
 CanvasRenderer:
   m_ObjectHideFlags: 0
