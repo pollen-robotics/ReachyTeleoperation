@@ -56,7 +56,7 @@ namespace TeleopReachy
                 {
                     controllerDeviceType = SupportedDevices.HTCVive;
                 }
-                if(rightHandDevice.name.Contains("Valve"))
+                if(rightHandDevice.name.Contains("Index"))
                 {
                     controllerDeviceType = SupportedDevices.ValveIndex;
                 }
