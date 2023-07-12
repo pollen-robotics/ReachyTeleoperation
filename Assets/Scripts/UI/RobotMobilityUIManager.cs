@@ -20,7 +20,7 @@ namespace TeleopReachy
         private Transform userTracker;
 
         private ConnectionStatus connectionStatus;
-        
+
 
         private Vector2 directionLeft;
         private Vector2 directionRight;
@@ -30,7 +30,6 @@ namespace TeleopReachy
 
         private bool ShowMobilityUIListenerSet = false;
         private bool HideMobilityUIListenerSet = false;
-        private bool SwitchMobilityOnListenerSet = false;
 
         [SerializeField]
         private Transform indicator;
@@ -73,22 +72,18 @@ namespace TeleopReachy
 
             UpdateMobilityUI(robotConfig.HasMobilePlatform());
 
-            if (SwitchMobilityOnListenerSet == false)
-            {
+            if (robotConfig.HasMobilePlatform())
                 robotStatus.event_OnSwitchMobilityOn.AddListener(UpdateMobilityUI);
-                SwitchMobilityOnListenerSet = true;
-            }
-
         }
 
         void UpdateMobilityUI(bool on)
         {
-            if (on == false)
+            if (!on)
             {
                 ShowMobilityUIListenerSet = false;
                 HideMobilityUIListenerSet = false;
-                robotStatus.event_OnStartTeleoperation.RemoveListener(ShowMobilityUI);   
-                robotStatus.event_OnStopTeleoperation.RemoveListener(HideMobilityUI);   
+                robotStatus.event_OnStartTeleoperation.RemoveListener(ShowMobilityUI);
+                robotStatus.event_OnStopTeleoperation.RemoveListener(HideMobilityUI);
             }
             else
             {

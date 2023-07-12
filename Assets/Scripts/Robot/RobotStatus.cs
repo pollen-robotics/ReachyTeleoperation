@@ -19,7 +19,7 @@ namespace TeleopReachy
 
         private bool isMobilityInBreakMode;
 
-        private bool isMobilityOn; // true if operator want to have control of the mobile base, false otherwise
+        private bool isMobilityOn = true; // true if operator want to have control of the mobile base, false otherwise
 
         private bool isLeftArmOn = true; // true if operator want to have control of the left arm, false otherwise
 
