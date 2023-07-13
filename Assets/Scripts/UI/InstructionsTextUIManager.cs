@@ -16,6 +16,8 @@ namespace TeleopReachy
         private ConnectionStatus connectionStatus;
         private TransitionRoomManager transitionRoomManager;
 
+        private TextButtonControllerModifier textButtonControllerModifier;
+
         private bool needUpdateText;
 
         private string instructionsText;
@@ -27,6 +29,7 @@ namespace TeleopReachy
             instructions = transform.GetComponent<Text>();
 
             transitionRoomManager = TransitionRoomManager.Instance;
+            textButtonControllerModifier = GetComponent<TextButtonControllerModifier>();
 
             if (Robot.IsCurrentRobotVirtual())
             {
@@ -55,7 +58,8 @@ namespace TeleopReachy
 
         void IndicateToPressA()
         {
-            instructionsText = "Press and hold A to start";
+            instructionsText = "Press and hold " + textButtonControllerModifier.GetPrimRightButtonName() + " to start";
+            instructionsText = textButtonControllerModifier.ChangeTextAccordingToController(instructionsText);
             instructionsDetailsText = "";
             needUpdateText = true;
         }
