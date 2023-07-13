@@ -24,7 +24,7 @@ namespace TeleopReachy
         private const float THRESHOLD_WARNING_BATTERY_LEVEL = 24.5f;
         private const float THRESHOLD_ERROR_BATTERY_LEVEL = 23.1f;
         private const float FPS_MINIMUM = 15f;
-        public const float THRESHOLD_ERROR_MOTOR_TEMPERATURE = 55.0f;
+        public const float THRESHOLD_ERROR_MOTOR_TEMPERATURE = 54.0f;
         public const float THRESHOLD_WARNING_MOTOR_TEMPERATURE = 50.0f;
 
         public UnityEvent event_OnWarningHighLatency;
