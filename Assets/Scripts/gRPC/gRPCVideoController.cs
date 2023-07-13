@@ -13,13 +13,9 @@ namespace TeleopReachy
         private CameraService.CameraServiceClient client = null;
 
         private Texture2D leftTexture;
-        private Texture2D rightTexture;
 
         [SerializeField]
         private Material leftEyeTexture;
-
-        [SerializeField]
-        private Texture defaultTexture;
 
         private bool firstConnection;
 
@@ -44,9 +40,6 @@ namespace TeleopReachy
             previous_elapsed = new Queue<float>(QUEUE_SIZE);
 
             leftTexture = new Texture2D(2, 2);
-            rightTexture = new Texture2D(2, 2);
-
-            SetDefaultOverlayTexture();
         }
 
         void Start()
@@ -101,7 +94,6 @@ namespace TeleopReachy
 
         public async void GetImage(CameraId side)
         {
-
             try
             {
                 if (needUpdateEyeImage)
@@ -111,10 +103,8 @@ namespace TeleopReachy
                     byte[] imageBytes = reply.Data.ToByteArray();
 
                     leftTexture.LoadImage(imageBytes);
-                    rightTexture.LoadImage(imageBytes);
 
                     leftEyeTexture.SetTexture("_MainTex", leftTexture);
-                    leftEyeTexture.SetTexture("_MainTexRight", rightTexture);
 
                     ComputeMeanFPS();
                     needUpdateEyeImage = true;
@@ -125,21 +115,11 @@ namespace TeleopReachy
                 Debug.LogWarning("RPC failed in GetImage : " + e);
                 isRobotInRoom = false;
                 event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
-                SetDefaultOverlayTexture();
             }
             catch (ArgumentNullException e)
             {
                 //reply can be null when app is closing
                 Debug.LogWarning("Null exception : " + e);
-            }
-        }
-
-        public void SetDefaultOverlayTexture()
-        {
-            if (leftEyeTexture.mainTexture != defaultTexture)
-            {
-                leftEyeTexture.mainTexture = defaultTexture;
-                leftEyeTexture.SetTexture("_MainTexRight", defaultTexture);
             }
         }
 
