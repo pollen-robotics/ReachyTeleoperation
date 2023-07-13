@@ -78,7 +78,6 @@ namespace TeleopReachy
                 event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
                 needUpdateEyeImage = true;
                 previous_time = -1;
-                // previous_time = Time.time;
             }
             catch (RpcException e)
             {
@@ -118,42 +117,6 @@ namespace TeleopReachy
                     leftEyeTexture.SetTexture("_MainTexRight", rightTexture);
 
                     ComputeMeanFPS();
-                    needUpdateEyeImage = true;
-                }
-            }
-            catch (RpcException e)
-            {
-                Debug.LogWarning("RPC failed in GetImage : " + e);
-                isRobotInRoom = false;
-                event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
-                SetDefaultOverlayTexture();
-            }
-            catch (ArgumentNullException e)
-            {
-                //reply can be null when app is closing
-                Debug.LogWarning("Null exception : " + e);
-            }
-        }
-
-        public async void GetBothImages()
-        {
-            try
-            {
-                if (needUpdateEyeImage)
-                {
-                    needUpdateEyeImage = false;
-                    var replyLeft = await client.GetImageAsync(new ImageRequest { Camera = new Reachy.Sdk.Camera.Camera { Id = CameraId.Left }, });
-                    var replyRight = await client.GetImageAsync(new ImageRequest { Camera = new Reachy.Sdk.Camera.Camera { Id = CameraId.Right }, });
-
-                    byte[] leftImageBytes = replyLeft.Data.ToByteArray();
-                    byte[] rightImageBytes = replyRight.Data.ToByteArray();
-
-                    leftTexture.LoadImage(leftImageBytes);
-                    rightTexture.LoadImage(rightImageBytes);
-
-                    leftEyeTexture.SetTexture("_MainTex", leftTexture);
-                    leftEyeTexture.SetTexture("_MainTexRight", rightTexture);
-
                     needUpdateEyeImage = true;
                 }
             }
