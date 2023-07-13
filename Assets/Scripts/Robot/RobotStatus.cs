@@ -29,8 +29,6 @@ namespace TeleopReachy
 
         private bool isMobilityActive; // true if panel must be shown, false otherwise
 
-        private bool is2DVisionModeOn;
-
         private bool areEmotionsActive;
 
         private bool isEmotionPlaying;
@@ -58,16 +56,7 @@ namespace TeleopReachy
         public UnityEvent event_OnRobotCompliantRequested;
         public UnityEvent event_OnRobotFullyCompliant;
 
-        public UnityEvent event_OnSwitchTo2DVision;
-        public UnityEvent event_OnSwitchTo3DVision;
-
         public UnityEvent<bool> event_OnSwitchMobilityOn;
-
-        void Start()
-        {
-            Set2DVisionModeOn(true);
-        }
-
 
         public void LeftGripperClosed(bool isclosed)
         {
@@ -159,11 +148,6 @@ namespace TeleopReachy
             return isGraspingLockActivated;
         }
 
-        public bool Is2DVisionModeOn()
-        {
-            return is2DVisionModeOn;
-        }
-
         public void SetGraspingLockActivated(bool isActivated, bool displayPopup = true)
         {
             isGraspingLockActivated = isActivated;
@@ -215,13 +199,6 @@ namespace TeleopReachy
         public void SetMobilityInCloseLoop(bool isCloseLoop)
         {
             isMobilityInCloseLoop = isCloseLoop;
-        }
-
-        public void Set2DVisionModeOn(bool is2DOn)
-        {
-            is2DVisionModeOn = is2DOn;
-            if (is2DVisionModeOn) event_OnSwitchTo2DVision.Invoke();
-            else event_OnSwitchTo3DVision.Invoke();
         }
 
         public void InitializeRobotState()
@@ -305,14 +282,13 @@ namespace TeleopReachy
              isRightArmOn= {7},
              isHeadOn= {8},
              isMobilityActive= {9},
-             is2DVisionModeOn= {10},
-             areEmotionsActive= {11},
-             isEmotionPlaying= {12},
-             statusChanged= {13},
-             hasMotorsSpeedLimited= {14}",
+             areEmotionsActive= {10},
+             isEmotionPlaying= {11},
+             statusChanged= {12},
+             hasMotorsSpeedLimited= {13}",
              isRobotTeleoperationActive, areRobotMovementsSuspended, isRobotCompliant,
               isMobilityInCloseLoop, isMobilityInBreakMode, isMobilityOn, isLeftArmOn, isRightArmOn, isHeadOn,
-               isMobilityActive, is2DVisionModeOn, areEmotionsActive, isEmotionPlaying, statusChanged, isGraspingLockActivated);
+               isMobilityActive, areEmotionsActive, isEmotionPlaying, statusChanged, isGraspingLockActivated);
         }
     }
 }
