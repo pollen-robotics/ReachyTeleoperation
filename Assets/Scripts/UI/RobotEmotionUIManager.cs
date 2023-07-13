@@ -18,7 +18,6 @@ namespace TeleopReachy
 
         void Awake()
         {
-            //EventManager.StartListening(EventNames.TeleoperationSceneLoaded, Init);
             EventManager.StartListening(EventNames.MirrorSceneLoaded, Init);
         }
 
@@ -39,7 +38,6 @@ namespace TeleopReachy
                 child.GetComponent<RawImage>().color = new Color(0.3f, 0.3f, 0.3f, 0.5f);
             }
             transform.GetChild((int)emotion).GetComponent<RawImage>().color = new Color(1.0f, 1.0f, 1.0f, 0.8f);
-            // transform.GetChild((int)e.Emotion).GetChild(0).gameObject.SetActive(true);
         }
 
         public void HighlightSelectedEmotion(Emotion emotion)
@@ -64,7 +62,6 @@ namespace TeleopReachy
                 child.GetComponent<RawImage>().color = new Color(1.0f, 1.0f, 1.0f, 0.8f);
             }
             Debug.Log($"[RobotEmotionUIManager]: RemoveEmotionShown {emotion}");
-            // transform.GetChild((int)e.Emotion).GetChild(0).gameObject.SetActive(false);
         }
     }
 }
