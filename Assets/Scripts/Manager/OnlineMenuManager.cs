@@ -93,22 +93,25 @@ namespace TeleopReachy
                         if (!isOnlineMenuOpen)
                         {
                             ShowOnlineMenu();
+                            HighlightCancel();
+                            //select cancel by default
+                            selectedItem = OnlineMenuItem.Cancel;
                         }
                         transform.rotation = Headset.rotation;
 
                         controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out rightJoystickDirection);
 
                         float r = Mathf.Sqrt(Mathf.Pow(rightJoystickDirection[0], 2) + Mathf.Pow(rightJoystickDirection[1], 2));
-                        if (r < 0.5)
+                        if (r > 0.5)
                         {
                             selectedItem = OnlineMenuItem.Cancel;
-                        }
-                        else
-                        {
+
                             float phi = Mathf.Atan2(rightJoystickDirection[1], rightJoystickDirection[0]);
 
-                            if (Maths.isApproxEqual(phi, -1.57f, 1f))
+                            if (Maths.isApproxEqual(phi, -1.046f, 0.5f))
                                 selectedItem = OnlineMenuItem.GraspingLock;
+                            else if (Maths.isApproxEqual(phi, -1.09f, 0.5f))
+                                selectedItem = OnlineMenuItem.Cancel;
                             else if (Maths.isApproxEqual(phi, 0f, 0.5f))
                                 selectedItem = OnlineMenuItem.Angry;
                             else if (Maths.isApproxEqual(phi, 1.046f, 0.5f))

@@ -92,12 +92,12 @@ namespace TeleopReachy
                 motorsErrorPanel.ActivateChildren(true);
                 if(wasWarningTemperature)
                 {
-                    string warningText = nbMotorsWarning > 1 ? nbMotorsWarning + " Motors becoming hot" : "1 Motor becoming hot";
+                    string warningText = nbMotorsWarning > 1 ? nbMotorsWarning + " Motors are heating up" : "1 Motor is heating up";
                     motorsErrorPanel.GetChild(1).GetComponent<Text>().text = warningText;
                 }
                 if(wasErrorTemperature)
                 {
-                    string errorText = nbMotorsError > 1 ? nbMotorsError + " Motors in error" : "1 Motor in error";
+                    string errorText = nbMotorsError > 1 ? nbMotorsError + " Motors in critical error" : "1 Motor in critical error";
                     motorsErrorPanel.GetChild(3).GetComponent<Text>().text = errorText;
                     motorsErrorPanel.GetChild(0).GetComponent<Image>().color = ColorsManager.error_red;
                 }
@@ -133,7 +133,7 @@ namespace TeleopReachy
         IEnumerator ReinitializeMotorsWarningValue(int seconds)
         {
             yield return new WaitForSeconds(3);
-            string warningText = "0 Motor becoming hot";
+            string warningText = "No motor is heating up";
             motorsErrorPanel.GetChild(1).GetComponent<Text>().text = warningText;
         }
 
@@ -150,7 +150,7 @@ namespace TeleopReachy
         IEnumerator ReinitializeMotorsErrorValue(int seconds)
         {
             yield return new WaitForSeconds(3);
-            string warningText = "0 Motor in error";
+            string warningText = "No motor in critical error";
             motorsErrorPanel.GetChild(3).GetComponent<Text>().text = warningText;
             motorsErrorPanel.GetChild(0).GetComponent<Image>().color = ColorsManager.error_black;
         }
