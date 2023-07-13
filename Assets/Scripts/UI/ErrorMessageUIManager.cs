@@ -133,7 +133,7 @@ namespace TeleopReachy
         IEnumerator ReinitializeMotorsWarningValue(int seconds)
         {
             yield return new WaitForSeconds(3);
-            string warningText = "0 Motor is heating up";
+            string warningText = "No motor is heating up";
             motorsErrorPanel.GetChild(1).GetComponent<Text>().text = warningText;
         }
 
@@ -150,7 +150,7 @@ namespace TeleopReachy
         IEnumerator ReinitializeMotorsErrorValue(int seconds)
         {
             yield return new WaitForSeconds(3);
-            string warningText = "0 Motor in critical error";
+            string warningText = "No motor in critical error";
             motorsErrorPanel.GetChild(3).GetComponent<Text>().text = warningText;
             motorsErrorPanel.GetChild(0).GetComponent<Image>().color = ColorsManager.error_black;
         }
