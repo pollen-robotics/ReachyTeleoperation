@@ -157,13 +157,11 @@ namespace TeleopReachy
                 SendJointsCommands(antennasSpeedLimit);
                 SendJointsCommands(antennasCommandBack);
                 cancellationToken.ThrowIfCancellationRequested();
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Sad));
                 event_OnEmotionOver.Invoke(Emotion.Sad);
             }
             catch (OperationCanceledException e)
             {
                 Debug.Log("Reachy sad has been canceled: " + e);
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Sad));
                 event_OnEmotionOver.Invoke(Emotion.Sad);
             }
         }
@@ -218,13 +216,11 @@ namespace TeleopReachy
                 SendJointsCommands(antennasCommandBack);
                 SendJointsCommands(antennasSpeedBack);
                 cancellationToken.ThrowIfCancellationRequested();
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Happy));
                 event_OnEmotionOver.Invoke(Emotion.Happy);
             }
             catch (OperationCanceledException e)
             {
                 Debug.Log("Reachy happy has been canceled: " + e);
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Happy));
                 event_OnEmotionOver.Invoke(Emotion.Happy);
             }
         }

@@ -78,7 +78,7 @@ namespace TeleopReachy
         {
             bool leftPrimaryButtonPressed = false;
             bool rightPrimaryButtonPressed;
-            //bool emotionSelected = false;
+
             if (robotStatus != null && !robotStatus.AreRobotMovementsSuspended())
             {
                 if (controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out rightPrimaryButtonPressed) && !rightPrimaryButtonPressed)

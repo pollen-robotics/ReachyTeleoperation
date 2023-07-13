@@ -48,25 +48,6 @@ namespace TeleopReachy
                 SetRobotCompliant();
         }
 
-        /* public void SendFullBodyCommands(ArmIKRequest leftArmRequest, ArmIKRequest rightArmRequest, HeadIKRequest headRequest)
-         {
-             FullBodyCartesianCommand bodyCommand = new FullBodyCartesianCommand();
-             if (robotConfig.HasLeftArm() && robotStatus.IsLeftArmOn())
-             {
-                 bodyCommand.LeftArm = leftArmRequest;
-             }
-             if (robotConfig.HasRightArm() && robotStatus.IsRightArmOn())
-             {
-                 bodyCommand.RightArm = rightArmRequest;
-             }
-             if (robotConfig.HasHead() && robotStatus.IsHeadOn())
-             {
-                 bodyCommand.Head = headRequest;
-             }
-
-             dataController.SendBodyCommand(bodyCommand);
-         }*/
-
         protected override void ActualSendGrippersCommands(JointsCommand gripperCommand)
         {
             dataController.SendGrippersCommand(gripperCommand);
