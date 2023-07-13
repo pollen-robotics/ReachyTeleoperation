@@ -64,12 +64,16 @@ namespace TeleopReachy
 
             bool leftPrimaryButtonPressed;
             bool rightPrimaryButtonPressed;
-            bool rightSecondaryyButtonPressed;
+            bool rightSecondaryButtonPressed;
 
             controllers.leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out leftPrimaryButtonPressed);
             controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out rightPrimaryButtonPressed);
 
-            controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out rightSecondaryyButtonPressed);
+            controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out rightSecondaryButtonPressed);
+            if (controllers.controllerDeviceType == ControllersManager.SupportedDevices.HTCVive)
+            {
+                controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out rightSecondaryButtonPressed);
+            }
 
             if (robotStatus != null && robotStatus.IsRobotTeleoperationActive() && robotStatus.IsMobilityActive() && robotStatus.IsMobilityOn() && !robotStatus.AreRobotMovementsSuspended())
             {
@@ -87,7 +91,7 @@ namespace TeleopReachy
                     direction = new Vector2(mobileBaseTranslation[0], mobileBaseTranslation[1]);
 
                     float translationSpeed = maxSpeedFactor;
-                    if (rightSecondaryyButtonPressed)
+                    if (rightSecondaryButtonPressed)
                         translationSpeed = 1.0f;
 
                     mobilityCommands.SendMobileBaseDirection(new Vector3(direction[1] * translationSpeed, -direction[0] * translationSpeed, -mobileBaseRotation[0] * 1.5f));

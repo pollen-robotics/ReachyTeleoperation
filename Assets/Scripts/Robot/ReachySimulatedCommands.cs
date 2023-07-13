@@ -5,13 +5,10 @@ using UnityEngine;
 using Reachy.Sdk.Joint;
 using Reachy.Sdk.Kinematics;
 using Reachy;
-using System.Threading;
-using System.Threading.Tasks;
-using UnityEngine.Events;
 
 namespace TeleopReachy
 {
-    public class ReachySimulatedCommands : MonoBehaviour
+    public class ReachySimulatedCommands : RobotCommands
     {
         private HeadTracker headTracker;
         private HandsTracker handsTracker;
@@ -29,23 +26,15 @@ namespace TeleopReachy
         private JointPosition q0_left;
         private JointPosition q0_right;
 
-        private RobotConfig robotConfig;
-        private RobotStatus robotStatus;
 
-        public UnityEvent<Emotion> event_OnEmotionOver;
-
-        // Token to cancel emotions
-        private CancellationTokenSource askForCancellation = new CancellationTokenSource();
 
         // Start is called before the first frame update
         void Start()
         {
+            Init();
             headTracker = UserTrackerManager.Instance.HeadTracker;
             handsTracker = UserTrackerManager.Instance.HandsTracker;
             userMovementsInput = UserInputManager.Instance.UserMovementsInput;
-
-            robotConfig = RobotDataManager.Instance.RobotConfig;
-            robotStatus = RobotDataManager.Instance.RobotStatus;
 
             reachy = GameObject.Find("Reachy").transform.GetComponent<ReachyController>();
 
@@ -75,51 +64,28 @@ namespace TeleopReachy
 
             HeadIKRequest headTarget = headTracker.GetHeadTarget();
 
-            float pos_right_gripper = userMovementsInput.GetRightGripperTarget();
-            float pos_left_gripper = userMovementsInput.GetLeftGripperTarget();
-
-            FullBodyCartesianCommand bodyCommand = new FullBodyCartesianCommand();
-            if (robotConfig.IsVirtual() || (robotConfig.HasLeftArm() && robotStatus.IsLeftArmOn()))
-                bodyCommand.LeftArm = leftArmRequest;
             if (robotConfig.IsVirtual() || !robotStatus.IsLeftArmOn())
                 SetLeftArmToModelPose();
 
-            if (robotConfig.IsVirtual() || (robotConfig.HasRightArm() && robotStatus.IsRightArmOn()))
-                bodyCommand.RightArm = rightArmRequest;
             if (robotConfig.IsVirtual() || !robotStatus.IsRightArmOn())
                 SetRightArmToModelPose();
 
-            if (robotConfig.IsVirtual() || robotConfig.HasHead() && robotStatus.IsHeadOn())
-                bodyCommand.Head = headTarget;
             if (robotConfig.IsVirtual() || !robotStatus.IsHeadOn())
                 SetHeadToModelPose();
+            SendFullBodyCommands(leftArmRequest, rightArmRequest, headTarget);
 
-            List<JointCommand> grippersCommand = new List<JointCommand>();
+            float pos_right_gripper = userMovementsInput.GetRightGripperTarget();
+            float pos_left_gripper = userMovementsInput.GetLeftGripperTarget();
+            SendGrippersCommands(pos_left_gripper, pos_right_gripper);
+        }
 
-            if (robotConfig.IsVirtual() || (robotConfig.HasLeftGripper() && robotStatus.IsLeftArmOn()))
-            {
-                var jointComL = new JointCommand();
-                jointComL.Id = new JointId { Name = "l_gripper" };
-                jointComL.GoalPosition = pos_left_gripper;
-
-                grippersCommand.Add(jointComL);
-            }
-
-            if (robotConfig.IsVirtual() || (robotConfig.HasRightGripper() && robotStatus.IsRightArmOn()))
-            {
-                var jointComR = new JointCommand();
-                jointComR.Id = new JointId { Name = "r_gripper" };
-                jointComR.GoalPosition = pos_right_gripper;
-
-                grippersCommand.Add(jointComR);
-            }
-
-            JointsCommand gripperCommand = new JointsCommand
-            {
-                Commands = { grippersCommand },
-            };
-
+        protected override void ActualSendBodyCommands(FullBodyCartesianCommand bodyCommand)
+        {
             reachyFakeServer.SendFullBodyCartesianCommands(bodyCommand);
+        }
+
+        protected override void ActualSendGrippersCommands(JointsCommand gripperCommand)
+        {
             reachyFakeServer.SendJointsCommands(gripperCommand);
         }
 
@@ -237,271 +203,11 @@ namespace TeleopReachy
             reachy.HandleCommand(rightArmTarget);
         }
 
-        public async void ReachyHappy()
+        protected override void SendJointsCommands(JointsCommand jointsCommand)
         {
-            Debug.Log("Simulated Reachy is happy");
-            CancellationToken cancellationToken = askForCancellation.Token;
-
-            JointsCommand antennasCommand1 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(10) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(-10) },
-                    }
-            };
-            JointsCommand antennasCommand2 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(-10) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(10) },
-                    }
-            };
-
-            JointsCommand antennasCommandBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    }
-            };
-            JointsCommand antennasSpeedBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 0 },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 0 },
-                    }
-            };
-
-            try
-            {
-                reachyFakeServer.SendJointsCommands(antennasSpeedBack);
-                for (int i = 0; i < 9; i++)
-                {
-                    reachyFakeServer.SendJointsCommands(antennasCommand1);
-                    await Task.Delay(100);
-                    reachyFakeServer.SendJointsCommands(antennasCommand2);
-                    await Task.Delay(100);
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-
-                await Task.Delay(200);
-                reachyFakeServer.SendJointsCommands(antennasCommandBack);
-                reachyFakeServer.SendJointsCommands(antennasSpeedBack);
-                cancellationToken.ThrowIfCancellationRequested();
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Happy));
-                event_OnEmotionOver.Invoke(Emotion.Happy);
-            }
-            catch (OperationCanceledException e)
-            {
-                Debug.Log("Reachy happy has been canceled: " + e);
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Happy));
-                event_OnEmotionOver.Invoke(Emotion.Happy);
-            }
+            reachyFakeServer.SendJointsCommands(jointsCommand);
         }
 
-        public async void ReachySad()
-        {
-            Debug.Log("Simulated Reachy is sad");
-            CancellationToken cancellationToken = askForCancellation.Token;
-
-            JointsCommand antennasSpeedLimit = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 1.5f},
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 1.5f },
-                    }
-            };
-            JointsCommand antennasSpeedLimit2 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 0.7f},
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 0.7f },
-                    }
-            };
-            JointsCommand antennasCommand1 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(140) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(-140) },
-                    }
-            };
-            JointsCommand antennasCommand2 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(120) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(-120) },
-                    }
-            };
-
-            JointsCommand antennasCommandBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    }
-            };
-
-            try
-            {
-                reachyFakeServer.SendJointsCommands(antennasSpeedLimit);
-                reachyFakeServer.SendJointsCommands(antennasCommand1);
-                await Task.Delay(2000);
-                cancellationToken.ThrowIfCancellationRequested();
-                reachyFakeServer.SendJointsCommands(antennasSpeedLimit2);
-                reachyFakeServer.SendJointsCommands(antennasCommand2);
-                await Task.Delay(600);
-                reachyFakeServer.SendJointsCommands(antennasCommand1);
-                await Task.Delay(600);
-                cancellationToken.ThrowIfCancellationRequested();
-                reachyFakeServer.SendJointsCommands(antennasCommand2);
-                await Task.Delay(600);
-                reachyFakeServer.SendJointsCommands(antennasCommand1);
-                await Task.Delay(1000);
-                reachyFakeServer.SendJointsCommands(antennasSpeedLimit);
-                reachyFakeServer.SendJointsCommands(antennasCommandBack);
-                cancellationToken.ThrowIfCancellationRequested();
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Sad));
-                event_OnEmotionOver.Invoke(Emotion.Sad);
-            }
-            catch (OperationCanceledException e)
-            {
-                Debug.Log("Reachy sad has been canceled: " + e);
-                //EmotionIsOver(new EmotionEventArgs(Emotion.Sad));
-                event_OnEmotionOver.Invoke(Emotion.Sad);
-            }
-        }
-
-
-
-        public async void ReachyConfused()
-        {
-            Debug.Log("Reachy is confused");
-            CancellationToken cancellationToken = askForCancellation.Token;
-
-            JointsCommand antennasSpeedLimit = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 2.3f},
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 2.3f },
-                    }
-            };
-            JointsCommand antennasCommand1 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(-20) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(-80) },
-                    }
-            };
-            JointsCommand antennasCommandBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    }
-            };
-            JointsCommand antennasSpeedBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 0 },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 0 },
-                    }
-            };
-
-            try
-            {
-                reachyFakeServer.SendJointsCommands(antennasSpeedLimit);
-                reachyFakeServer.SendJointsCommands(antennasCommand1);
-                await Task.Delay(2000);
-                cancellationToken.ThrowIfCancellationRequested();
-                reachyFakeServer.SendJointsCommands(antennasCommandBack);
-                cancellationToken.ThrowIfCancellationRequested();
-                event_OnEmotionOver.Invoke(Emotion.Confused);
-            }
-            catch (OperationCanceledException e)
-            {
-                Debug.Log("Reachy confused has been canceled: " + e);
-                event_OnEmotionOver.Invoke(Emotion.Confused);
-            }
-        }
-
-        public async void ReachyAngry()
-        {
-            Debug.Log("Reachy is angry");
-            CancellationToken cancellationToken = askForCancellation.Token;
-
-            JointsCommand antennasSpeedLimit1 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 5f},
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 5f },
-                    }
-            };
-            JointsCommand antennasSpeedLimit2 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna"  }, SpeedLimit = 2.3f},
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 2.3f },
-                    }
-            };
-            JointsCommand antennasCommand1 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(80) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(-80) },
-                    }
-            };
-            JointsCommand antennasCommand2 = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(40) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(-40) },
-                    }
-            };
-            JointsCommand antennasCommandBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, GoalPosition=Mathf.Deg2Rad*(0) },
-                    }
-            };
-            JointsCommand antennasSpeedBack = new JointsCommand
-            {
-                Commands = {
-                    new JointCommand { Id=new JointId { Name = "l_antenna" }, SpeedLimit = 0 },
-                    new JointCommand { Id=new JointId { Name = "r_antenna" }, SpeedLimit = 0 },
-                    }
-            };
-
-            try
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    reachyFakeServer.SendJointsCommands(antennasSpeedBack);
-                    reachyFakeServer.SendJointsCommands(antennasCommand1);
-                    await Task.Delay(1000);
-                    cancellationToken.ThrowIfCancellationRequested();
-                    reachyFakeServer.SendJointsCommands(antennasSpeedLimit2);
-                    reachyFakeServer.SendJointsCommands(antennasCommand2);
-                    await Task.Delay(500);
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-
-                reachyFakeServer.SendJointsCommands(antennasSpeedBack);
-                reachyFakeServer.SendJointsCommands(antennasCommand1);
-                await Task.Delay(1500);
-                cancellationToken.ThrowIfCancellationRequested();
-                reachyFakeServer.SendJointsCommands(antennasSpeedLimit2);
-
-                reachyFakeServer.SendJointsCommands(antennasCommandBack);
-                cancellationToken.ThrowIfCancellationRequested();
-                event_OnEmotionOver.Invoke(Emotion.Angry);
-            }
-            catch (OperationCanceledException e)
-            {
-                Debug.Log("Reachy angry has been canceled: " + e);
-                event_OnEmotionOver.Invoke(Emotion.Angry);
-            }
-        }
     }
 }
 

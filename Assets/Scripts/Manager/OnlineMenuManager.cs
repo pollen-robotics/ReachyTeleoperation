@@ -29,8 +29,6 @@ namespace TeleopReachy
 
         private bool isOnlineMenuOpen;
 
-        private bool lastUpdateWasEmotionSelected;
-
         private bool leftPrimaryButtonPreviouslyPressed;
 
         private Vector2 rightJoystickDirection;
@@ -45,13 +43,11 @@ namespace TeleopReachy
 
         private void OnEnable()
         {
-            //EventManager.StartListening(EventNames.TeleoperationSceneLoaded, Init);
             EventManager.StartListening(EventNames.MirrorSceneLoaded, Init);
         }
 
         private void OnDisable()
         {
-            //EventManager.StopListening(EventNames.TeleoperationSceneLoaded, Init);
             EventManager.StopListening(EventNames.MirrorSceneLoaded, Init);
         }
 
@@ -71,8 +67,6 @@ namespace TeleopReachy
         {
             HideOnlineMenu();
 
-            lastUpdateWasEmotionSelected = false;
-
             selectedItem = OnlineMenuItem.Cancel;
             selectedEmotion = Emotion.NoEmotion;
 
@@ -84,7 +78,7 @@ namespace TeleopReachy
         {
             bool leftPrimaryButtonPressed = false;
             bool rightPrimaryButtonPressed;
-            bool emotionSelected = false;
+
             if (robotStatus != null && !robotStatus.AreRobotMovementsSuspended())
             {
                 if (controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out rightPrimaryButtonPressed) && !rightPrimaryButtonPressed)
@@ -98,91 +92,99 @@ namespace TeleopReachy
                     {
                         if (!isOnlineMenuOpen)
                         {
-                            // if(robotStatus.IsRobotTeleoperationActive()) ShowOnlineMenu();
                             ShowOnlineMenu();
+                            HighlightCancel();
+                            //select cancel by default
+                            selectedItem = OnlineMenuItem.Cancel;
                         }
                         transform.rotation = Headset.rotation;
 
                         controllers.rightHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out rightJoystickDirection);
 
                         float r = Mathf.Sqrt(Mathf.Pow(rightJoystickDirection[0], 2) + Mathf.Pow(rightJoystickDirection[1], 2));
-                        if (r < 0.5)
+                        if (r > 0.5)
                         {
                             selectedItem = OnlineMenuItem.Cancel;
-                        }
-                        else
-                        {
+
                             float phi = Mathf.Atan2(rightJoystickDirection[1], rightJoystickDirection[0]);
 
-                            if (Maths.isApproxEqual(phi, -2f, 0.2f))
+                            if (Maths.isApproxEqual(phi, -1.046f, 0.5f))
                                 selectedItem = OnlineMenuItem.GraspingLock;
+                            else if (Maths.isApproxEqual(phi, -1.09f, 0.5f))
+                                selectedItem = OnlineMenuItem.Cancel;
                             else if (Maths.isApproxEqual(phi, 0f, 0.5f))
                                 selectedItem = OnlineMenuItem.Angry;
-                            else if (Maths.isApproxEqual(phi, 1f, 0.5f))
+                            else if (Maths.isApproxEqual(phi, 1.046f, 0.5f))
                                 selectedItem = OnlineMenuItem.Sad;
-                            else if (Maths.isApproxEqual(phi, 2f, 0.5f))
+                            else if (Maths.isApproxEqual(phi, 2.09f, 0.5f))
                                 selectedItem = OnlineMenuItem.Confused;
                             else if (Maths.isApproxEqual(phi, 3.14f, 0.5f))
                                 selectedItem = OnlineMenuItem.Happy;
                         }
                         if (robotConfig.IsVirtual() || robotConfig.HasHead())
                         {
-                            if (selectedItem == OnlineMenuItem.Sad)
+                            switch (selectedItem)
                             {
-                                if (selectedEmotion != Emotion.Sad)
-                                {
-                                    event_OnEmotionSelected.Invoke(Emotion.Sad);
-                                }
-                                selectedEmotion = Emotion.Sad;
-                                emotionSelected = true;
-                            }
-                            if (selectedItem == OnlineMenuItem.Confused)
-                            {
-                                if (selectedEmotion != Emotion.Confused)
-                                {
-                                    event_OnEmotionSelected.Invoke(Emotion.Confused);
-                                }
-                                selectedEmotion = Emotion.Confused;
-                                emotionSelected = true;
-                            }
-                            if (selectedItem == OnlineMenuItem.Happy)
-                            {
-                                if (selectedEmotion != Emotion.Happy)
-                                {
-                                    event_OnEmotionSelected.Invoke(Emotion.Happy);
-                                }
-                                selectedEmotion = Emotion.Happy;
-                                emotionSelected = true;
-                            }
-                            if (selectedItem == OnlineMenuItem.Angry)
-                            {
-                                if (selectedEmotion != Emotion.Angry)
-                                {
-                                    event_OnEmotionSelected.Invoke(Emotion.Angry);
-                                }
-                                selectedEmotion = Emotion.Angry;
-                                emotionSelected = true;
-                            }
-
-                            if (!emotionSelected)
-                            {
-                                event_OnNoEmotionSelected.Invoke();
-                                selectedEmotion = Emotion.NoEmotion;
-                                if (selectedItem == OnlineMenuItem.Cancel)
-                                {
-                                    RemoveHighlightGraspingLock();
-                                    HighlightCancel();
-                                }
-                                if (selectedItem == OnlineMenuItem.GraspingLock)
-                                {
-                                    HighlightGraspingLock();
-                                    RemoveHighlightCancel();
-                                }
-                            }
-                            else
-                            {
-                                RemoveHighlightCancel();
-                                RemoveHighlightGraspingLock();
+                                case OnlineMenuItem.Angry:
+                                    {
+                                        if (selectedEmotion != Emotion.Angry)
+                                        {
+                                            event_OnEmotionSelected.Invoke(Emotion.Angry);
+                                        }
+                                        selectedEmotion = Emotion.Angry;
+                                        RemoveHighlightCancel();
+                                        RemoveHighlightGraspingLock();
+                                        break;
+                                    }
+                                case OnlineMenuItem.Sad:
+                                    {
+                                        if (selectedEmotion != Emotion.Sad)
+                                        {
+                                            event_OnEmotionSelected.Invoke(Emotion.Sad);
+                                        }
+                                        selectedEmotion = Emotion.Sad;
+                                        RemoveHighlightCancel();
+                                        RemoveHighlightGraspingLock();
+                                        break;
+                                    }
+                                case OnlineMenuItem.Confused:
+                                    {
+                                        if (selectedEmotion != Emotion.Confused)
+                                        {
+                                            event_OnEmotionSelected.Invoke(Emotion.Confused);
+                                        }
+                                        selectedEmotion = Emotion.Confused;
+                                        RemoveHighlightCancel();
+                                        RemoveHighlightGraspingLock();
+                                        break;
+                                    }
+                                case OnlineMenuItem.Happy:
+                                    {
+                                        if (selectedEmotion != Emotion.Happy)
+                                        {
+                                            event_OnEmotionSelected.Invoke(Emotion.Happy);
+                                        }
+                                        selectedEmotion = Emotion.Happy;
+                                        RemoveHighlightCancel();
+                                        RemoveHighlightGraspingLock();
+                                        break;
+                                    }
+                                case OnlineMenuItem.Cancel:
+                                    {
+                                        event_OnNoEmotionSelected.Invoke();
+                                        selectedEmotion = Emotion.NoEmotion;
+                                        RemoveHighlightGraspingLock();
+                                        HighlightCancel();
+                                        break;
+                                    }
+                                case OnlineMenuItem.GraspingLock:
+                                    {
+                                        event_OnNoEmotionSelected.Invoke();
+                                        selectedEmotion = Emotion.NoEmotion;
+                                        HighlightGraspingLock();
+                                        RemoveHighlightCancel();
+                                        break;
+                                    }
                             }
                         }
                     }
@@ -193,15 +195,28 @@ namespace TeleopReachy
 
                     if (controllers.leftHandDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out leftPrimaryButtonPressed) && !leftPrimaryButtonPressed && leftPrimaryButtonPreviouslyPressed)
                     {
-                        if (lastUpdateWasEmotionSelected)
+                        switch (selectedItem)
                         {
-                            event_OnAskEmotion.Invoke(selectedEmotion);
+                            case OnlineMenuItem.Happy:
+                            case OnlineMenuItem.Angry:
+                            case OnlineMenuItem.Confused:
+                            case OnlineMenuItem.Sad:
+                                {
+                                    if (!robotStatus.IsEmotionPlaying())
+                                    {
+                                        event_OnAskEmotion.Invoke(selectedEmotion);
+                                    }
+                                    break;
+                                }
+                            case OnlineMenuItem.GraspingLock:
+                                {
+                                    LockGrasp();
+                                    break;
+                                }
                         }
-                        if (selectedItem == OnlineMenuItem.GraspingLock) LockGrasp();
                     }
 
                     leftPrimaryButtonPreviouslyPressed = leftPrimaryButtonPressed;
-                    lastUpdateWasEmotionSelected = emotionSelected;
                 }
             }
         }

@@ -25,13 +25,11 @@ namespace TeleopReachy
 
         private void OnEnable()
         {
-            /*EventManager.StartListening(EventNames.TeleoperationSceneLoaded, Init);*/
             EventManager.StartListening(EventNames.MirrorSceneLoaded, Init);
         }
 
         private void OnDisable()
         {
-            /*EventManager.StopListening(EventNames.TeleoperationSceneLoaded, Init);*/
             EventManager.StopListening(EventNames.MirrorSceneLoaded, Init);
         }
 
@@ -49,48 +47,32 @@ namespace TeleopReachy
 
         private void AskToPlayEmotion(Emotion emotion)
         {
+            RobotCommands robot;
             if (robotConfig.HasHead() && robotStatus.IsRobotTeleoperationActive() && robotStatus.AreEmotionsActive() && !robotStatus.IsEmotionPlaying() && !robotStatus.AreRobotMovementsSuspended())
             {
-                robotStatus.SetEmotionPlaying(true);
-                switch (emotion)
-                {
-                    case Emotion.Sad:
-                        robotCommands.ReachySad();
-                        break;
-
-                    case Emotion.Happy:
-                        robotCommands.ReachyHappy();
-                        break;
-
-                    case Emotion.Angry:
-                        robotCommands.ReachyAngry();
-                        break;
-
-                    case Emotion.Confused:
-                        robotCommands.ReachyConfused();
-                        break;
-                }
+                robot = robotCommands;
             }
             else
             {
-                robotStatus.SetEmotionPlaying(true);
-                switch (emotion)
-                {
-                    case Emotion.Sad:
-                        robotSimulatedCommands.ReachySad();
-                        break;
+                robot = robotSimulatedCommands;
+            }
+            robotStatus.SetEmotionPlaying(true);
+            switch (emotion)
+            {
+                case Emotion.Sad:
+                    robot.ReachySad();
+                    break;
 
-                    case Emotion.Happy:
-                        robotSimulatedCommands.ReachyHappy();
-                        break;
-                    case Emotion.Angry:
-                        robotSimulatedCommands.ReachyAngry();
-                        break;
+                case Emotion.Happy:
+                    robot.ReachyHappy();
+                    break;
+                case Emotion.Angry:
+                    robot.ReachyAngry();
+                    break;
 
-                    case Emotion.Confused:
-                        robotSimulatedCommands.ReachyConfused();
-                        break;
-                }
+                case Emotion.Confused:
+                    robot.ReachyConfused();
+                    break;
             }
         }
 

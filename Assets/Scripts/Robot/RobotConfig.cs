@@ -101,7 +101,6 @@ namespace TeleopReachy
         {
             Debug.Log("[Robot config]: SetMobilePlatform");
             has_mobile_platform = true;
-
             event_OnConfigChanged.Invoke();
         }
 
