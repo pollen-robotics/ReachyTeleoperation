@@ -98,7 +98,6 @@ namespace TeleopReachy
                     {
                         if (!isOnlineMenuOpen)
                         {
-                            // if(robotStatus.IsRobotTeleoperationActive()) ShowOnlineMenu();
                             ShowOnlineMenu();
                         }
                         transform.rotation = Headset.rotation;
@@ -114,13 +113,13 @@ namespace TeleopReachy
                         {
                             float phi = Mathf.Atan2(rightJoystickDirection[1], rightJoystickDirection[0]);
 
-                            if (Maths.isApproxEqual(phi, -2f, 0.2f))
+                            if (Maths.isApproxEqual(phi, -1.57f, 1f))
                                 selectedItem = OnlineMenuItem.GraspingLock;
                             else if (Maths.isApproxEqual(phi, 0f, 0.5f))
                                 selectedItem = OnlineMenuItem.Angry;
-                            else if (Maths.isApproxEqual(phi, 1f, 0.5f))
+                            else if (Maths.isApproxEqual(phi, 1.046f, 0.5f))
                                 selectedItem = OnlineMenuItem.Sad;
-                            else if (Maths.isApproxEqual(phi, 2f, 0.5f))
+                            else if (Maths.isApproxEqual(phi, 2.09f, 0.5f))
                                 selectedItem = OnlineMenuItem.Confused;
                             else if (Maths.isApproxEqual(phi, 3.14f, 0.5f))
                                 selectedItem = OnlineMenuItem.Happy;
