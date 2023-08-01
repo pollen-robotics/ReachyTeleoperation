@@ -126,11 +126,11 @@ namespace TeleopReachy
             {
                 has_head = true;
             }
-            if (allJointsId.Names.Contains("l_gripper"))
+            if (allJointsId.Names.Contains("l_gripper_finger"))
             {
                 has_left_gripper = true;
             }
-            if (allJointsId.Names.Contains("r_gripper"))
+            if (allJointsId.Names.Contains("r_gripper_finger"))
             {
                 has_right_gripper = true;
             }

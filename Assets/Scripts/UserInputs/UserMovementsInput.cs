@@ -137,7 +137,7 @@ namespace TeleopReachy
 
             if (!robotStatus.IsGraspingLockActivated())
             {
-                pos_right_gripper = Mathf.Deg2Rad * (handsTracker.rightHand.trigger * 20 - 50 * (1 - handsTracker.rightHand.trigger));
+                pos_right_gripper = Mathf.Deg2Rad * (handsTracker.rightHand.trigger * 30 - 50 * (1 - handsTracker.rightHand.trigger));
                 //set correct gripper status 
                 if (handsTracker.rightHand.trigger > 0.5)
                     right_gripper_closed = true;

@@ -37,7 +37,8 @@ namespace TeleopReachy
 
         void UpdateRobot()
         {
-            reachy = GameObject.Find("Reachy").GetComponent<ReachyController>();
+            // reachy = GameObject.Find("Reachy").GetComponent<ReachyController>();
+            reachy = null;
         }
 
         void UpdateModelRobot()
