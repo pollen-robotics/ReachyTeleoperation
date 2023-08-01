@@ -31,7 +31,7 @@ public abstract class WebRTCBase : MonoBehaviour
         // string ip_address = "localhost"; //PlayerPrefs.GetString("ip_address");
         // string ip_address="192.168.1.126";
         // string ip_address="0.0.0.0";
-        string ip_address="localhost";
+        string ip_address="192.168.1.214";
         _signalingServerURL = "ws://" + ip_address + ":8080/ws";
         Debug.Log("Signaling server URL: " + _signalingServerURL);
     }

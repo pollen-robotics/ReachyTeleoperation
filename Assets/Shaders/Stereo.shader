@@ -2,8 +2,8 @@ Shader "Unlit/Stereo"
 {
     Properties
     {
-        _LeftTex("LeftTex", 2D) = "white" {}
-        _RightTex("RightTex", 2D) = "white" {}
+        _LeftTex("Texture", 2D) = "white" {}
+        _RightTex("Texture", 2D) = "white" {}
 
         _Color("Color", Color) = (1,1,1,1)
     }

@@ -51,7 +51,7 @@ namespace TeleopReachy
             //isServerConnected = false;
             isRobotConfigReady = false;
             isRobotInDataRoom = false;
-            isRobotInVideoRoom = false;
+            isRobotInVideoRoom = true;
             isRobotInMobileRoom = false;
             isRobotInRestartRoom = false;
 

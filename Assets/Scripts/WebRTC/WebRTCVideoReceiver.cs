@@ -7,9 +7,10 @@ namespace TeleopReachy
     public class WebRTCVideoReceiver : WebRTCBase
     {
         private MediaStream _receiveStream;
-        private bool isRobotInRoom;
+        private bool isRobotInRoom = true;
         
         public Renderer screen;
+        public Material image;
         public UnityEvent<bool> event_OnVideoRoomStatusHasChanged;
 
         protected override void Start()
@@ -47,13 +48,17 @@ namespace TeleopReachy
             if (e.Track is VideoStreamTrack video)
             {
                 isRobotInRoom = true;
-                // event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
+                event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
                 video.OnVideoReceived += tex =>
                 {
-                    if (e.Track.Id == "right")
-                        screen.material.SetTexture("_RightTex", tex);
-                    else
-                        screen.material.SetTexture("_LeftTex", tex);
+                    if (e.Track.Id == "right"){
+                        Debug.LogError("right");
+                        image.SetTexture("_RightTex", tex);
+                    }
+                    else{
+                        Debug.LogError("left");
+                        image.SetTexture("_LeftTex", tex);
+                    }
                 };
             }
         }
