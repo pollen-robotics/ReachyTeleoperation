@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37312585, g: 0.3807451, b: 0.358728, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -924,8 +924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f093a8021ce9bc443a5de613579a73ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightTexOffsetX: 0
-  rightTexOffsetY: 0
 --- !u!1 &258652890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,6 +1999,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 780521630}
   m_CullTransparentMesh: 0
+--- !u!1 &803308013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 803308015}
+  - component: {fileID: 803308014}
+  - component: {fileID: 803308016}
+  m_Layer: 0
+  m_Name: WebRTCManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &803308014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803308013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ecaf72ba3496494abdecbcd95af4bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &803308015
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803308013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &803308016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803308013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88d4fc661710a8338b1da36051e817e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  room: teleop_stereo_video_robot_python_server
+  screen: {fileID: 224850607}
+  event_OnVideoRoomStatusHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &804350694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2300,14 +2359,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888243800}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67611e5c451c51543a709126d8223132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rpcException: 
   leftEyeTexture: {fileID: 2100000, guid: f39d5f55597dea84fab92dddfe424377, type: 2}
-  defaultTexture: {fileID: 2800000, guid: beb6dc0e93392f64cb9e4d954c6a2ce3, type: 3}
   event_OnVideoRoomStatusHasChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2374,6 +2432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a1bd65db3d4d145ad25a6d39b3ec46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  webRTCVideoController: {fileID: 0}
   event_OnConnectionStatusHasChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2601,12 +2660,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   event_OnRobotFullyCompliant:
-    m_PersistentCalls:
-      m_Calls: []
-  event_OnSwitchTo2DVision:
-    m_PersistentCalls:
-      m_Calls: []
-  event_OnSwitchTo3DVision:
     m_PersistentCalls:
       m_Calls: []
   event_OnSwitchMobilityOn:

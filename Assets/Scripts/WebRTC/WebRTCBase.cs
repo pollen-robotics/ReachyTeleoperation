@@ -8,7 +8,7 @@ using UnityEngine;
 public abstract class WebRTCBase : MonoBehaviour
 {
     private string _signalingServerURL;
-    public string room = "teleop_audio_robot_reachy_xprize_finals";
+    public string room = "teleop_stereo_video_robot_python_server";
     protected string uid = "Unity";
     private Signaling _signaling;
 
@@ -30,7 +30,8 @@ public abstract class WebRTCBase : MonoBehaviour
         //WebRTC.Initialize();
         // string ip_address = "localhost"; //PlayerPrefs.GetString("ip_address");
         // string ip_address="192.168.1.126";
-        string ip_address="0.0.0.0";
+        // string ip_address="0.0.0.0";
+        string ip_address="localhost";
         _signalingServerURL = "ws://" + ip_address + ":8080/ws";
         Debug.Log("Signaling server URL: " + _signalingServerURL);
     }

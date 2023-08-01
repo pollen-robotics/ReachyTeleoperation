@@ -22,10 +22,11 @@ namespace TeleopReachy
         private bool areRobotServicesRestarting;
 
         private gRPCDataController dataController;
-        private gRPCVideoController videoController;
+        // private gRPCVideoController videoController;
         private gRPCMobileBaseController mobileController;
 
 
+        public WebRTCVideoReceiver webRTCVideoController;
         public UnityEvent event_OnConnectionStatusHasChanged;
         public UnityEvent event_OnRobotReady;
 
@@ -40,7 +41,7 @@ namespace TeleopReachy
         void Start()
         {
             dataController = gRPCManager.Instance.gRPCDataController;
-            videoController = gRPCManager.Instance.gRPCVideoController;
+            // videoController = gRPCManager.Instance.gRPCVideoController;
             mobileController = gRPCManager.Instance.gRPCMobileBaseController;
 
             robotConfig = RobotDataManager.Instance.RobotConfig;
@@ -62,7 +63,7 @@ namespace TeleopReachy
 
             statusChanged = false;
 
-            if (videoController != null) videoController.event_OnVideoRoomStatusHasChanged.AddListener(VideoControllerStatusHasChanged);
+            if (webRTCVideoController != null) webRTCVideoController.event_OnVideoRoomStatusHasChanged.AddListener(VideoControllerStatusHasChanged);
             if (dataController != null) dataController.event_DataControllerStatusHasChanged.AddListener(DataControllerStatusHasChanged);
             if (mobileController != null) mobileController.event_OnMobileRoomStatusHasChanged.AddListener(MobileControllerStatusHasChanged);
 
