@@ -24,8 +24,6 @@ namespace TeleopReachy
 
         void Start()
         {
-            Debug.LogError("[ControllersManager] Start");
-            Debug.LogError("[ControllersManager] controllerDeviceType : " + controllerDeviceType);
             UpdateDevicesList();
 
             UnityEngine.XR.InputDevices.deviceConnected += UpdateDevicesList;
@@ -66,8 +64,6 @@ namespace TeleopReachy
                     controllerDeviceType = SupportedDevices.ValveIndex;
                 }
             }
-
-            Debug.LogError("[ControllersManager] UpdateDevicesList : " + controllerDeviceType);
 
             event_OnDevicesUpdate.Invoke();
         }
