@@ -479,6 +479,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3884292885015161316, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
+        type: 3}
+      propertyPath: motors.Array.data[4].name
+      value: l_elbow_yaw
+      objectReference: {fileID: 0}
+    - target: {fileID: 3884292885015161316, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
+        type: 3}
+      propertyPath: motors.Array.data[6].name
+      value: l_wrist_yaw
+      objectReference: {fileID: 0}
+    - target: {fileID: 3884292885015161316, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
+        type: 3}
+      propertyPath: motors.Array.data[9].name
+      value: l_gripper_finger
+      objectReference: {fileID: 0}
+    - target: {fileID: 3884292885015161316, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
+        type: 3}
+      propertyPath: motors.Array.data[12].name
+      value: r_elbow_yaw
+      objectReference: {fileID: 0}
+    - target: {fileID: 3884292885015161316, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
+        type: 3}
+      propertyPath: motors.Array.data[14].name
+      value: r_wrist_yaw
+      objectReference: {fileID: 0}
+    - target: {fileID: 3884292885015161316, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
+        type: 3}
+      propertyPath: motors.Array.data[17].name
+      value: r_gripper_finger
+      objectReference: {fileID: 0}
     - target: {fileID: 3884292885313813232, guid: 38b5d0ddf75e8d042afa5cc2ae1d948b,
         type: 3}
       propertyPath: m_ParentAnchorPosition.x
@@ -5462,12 +5492,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099ef87a3b342c046baebe9198d87f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reachyFakeServer: {fileID: 1435512746}
-  reachy: {fileID: 0}
-  reachyModel: {fileID: 58990123}
   event_OnEmotionOver:
     m_PersistentCalls:
       m_Calls: []
+  reachyFakeServer: {fileID: 1435512746}
+  reachy: {fileID: 0}
+  reachyModel: {fileID: 58990123}
 --- !u!1 &939281025
 GameObject:
   m_ObjectHideFlags: 0

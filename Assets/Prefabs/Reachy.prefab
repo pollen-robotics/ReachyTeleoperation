@@ -373,7 +373,7 @@ MonoBehaviour:
     offset: -90
     isDirect: 0
     isCompliant: 0
-  - name: l_elbow_yaw
+  - name: l_arm_yaw
     uid: 0
     gameObject: {fileID: 3962830348483502059}
     targetPosition: 0
@@ -389,7 +389,7 @@ MonoBehaviour:
     offset: 0
     isDirect: 0
     isCompliant: 0
-  - name: l_wrist_yaw
+  - name: l_forearm_yaw
     uid: 0
     gameObject: {fileID: 3962830348483502065}
     targetPosition: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
     offset: 0
     isDirect: 0
     isCompliant: 0
-  - name: l_gripper_finger
+  - name: l_gripper
     uid: 0
     gameObject: {fileID: 3962830348483502071}
     targetPosition: 0
@@ -437,7 +437,7 @@ MonoBehaviour:
     offset: 90
     isDirect: 0
     isCompliant: 0
-  - name: r_elbow_yaw
+  - name: r_arm_yaw
     uid: 0
     gameObject: {fileID: 3962830348483501963}
     targetPosition: 0
@@ -453,7 +453,7 @@ MonoBehaviour:
     offset: 0
     isDirect: 0
     isCompliant: 0
-  - name: r_wrist_yaw
+  - name: r_forearm_yaw
     uid: 0
     gameObject: {fileID: 3962830348483501969}
     targetPosition: 0
@@ -477,7 +477,7 @@ MonoBehaviour:
     offset: 0
     isDirect: 0
     isCompliant: 0
-  - name: r_gripper_finger
+  - name: r_gripper
     uid: 0
     gameObject: {fileID: 3962830348483501975}
     targetPosition: 0
