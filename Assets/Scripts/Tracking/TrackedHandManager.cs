@@ -27,7 +27,7 @@ namespace TeleopReachy
                         UnityEngine.Quaternion targetRotation = new UnityEngine.Quaternion();
                         if (side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(-60, 30, 0);
                         else targetRotation.eulerAngles = new Vector3(-60, -30, 0);
-                        transform.rotation = targetRotation;
+                        transform.localRotation = targetRotation;
                         break;
                     }
                 case ControllersManager.SupportedDevices.ValveIndex:
@@ -36,7 +36,7 @@ namespace TeleopReachy
                         UnityEngine.Quaternion targetRotation = new UnityEngine.Quaternion();
                         if (side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(0, 0, 20);
                         else targetRotation.eulerAngles = new Vector3(0, 0, -20);
-                        transform.rotation = targetRotation;
+                        transform.localRotation = targetRotation;
                         break;
                     }
                 case ControllersManager.SupportedDevices.HTCVive:
@@ -45,7 +45,7 @@ namespace TeleopReachy
                         UnityEngine.Quaternion targetRotation = new UnityEngine.Quaternion();
                         if (side_id == ArmSide.Left) targetRotation.eulerAngles = new Vector3(0, 0, 0);
                         else targetRotation.eulerAngles = new Vector3(0, 0, 0);
-                        transform.rotation = targetRotation;
+                        transform.localRotation = targetRotation;
                         break;
                     }
             }
