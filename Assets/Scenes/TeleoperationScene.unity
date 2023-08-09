@@ -924,8 +924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f093a8021ce9bc443a5de613579a73ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightTexOffsetX: 0
-  rightTexOffsetY: 0
 --- !u!1 &258652890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2307,7 +2305,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rpcException: 
   leftEyeTexture: {fileID: 2100000, guid: f39d5f55597dea84fab92dddfe424377, type: 2}
-  defaultTexture: {fileID: 2800000, guid: beb6dc0e93392f64cb9e4d954c6a2ce3, type: 3}
   event_OnVideoRoomStatusHasChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2601,12 +2598,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   event_OnRobotFullyCompliant:
-    m_PersistentCalls:
-      m_Calls: []
-  event_OnSwitchTo2DVision:
-    m_PersistentCalls:
-      m_Calls: []
-  event_OnSwitchTo3DVision:
     m_PersistentCalls:
       m_Calls: []
   event_OnSwitchMobilityOn:
@@ -3618,7 +3609,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365689279}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -80}
+  m_LocalPosition: {x: 0, y: 0, z: -124.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 122493229}
@@ -3627,7 +3618,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -375}
+  m_AnchoredPosition: {x: 0.2, y: -388.5}
   m_SizeDelta: {x: 325, y: 325}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1365689281
