@@ -41,9 +41,6 @@ namespace TeleopReachy
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, rightDevices);
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, leftDevices);
 
-            Debug.LogError("Right : " + rightDevices);
-            Debug.LogError("Left : " + rightDevices);
-
             if (rightDevices.Count == 1) rightHandDevice = rightDevices[0];
             else if (rightDevices.Count > 1) Debug.LogError("Too many right controllers detected");
             if (leftDevices.Count == 1) leftHandDevice = leftDevices[0];
