@@ -48,7 +48,7 @@ namespace TeleopReachy
 
         private void UpdateTemperatures(Dictionary<JointId, float> Temperatures)
         {
-            foreach(KeyValuePair<JointId, float> motor in Temperatures)
+            /*foreach(KeyValuePair<JointId, float> motor in Temperatures)
             {
                 string motorName = motor.Key.Name + "_temperature";
                 GameObject currentMotor = motors.Find(m => m.name == motorName);
@@ -68,7 +68,7 @@ namespace TeleopReachy
                         currentMotor.transform.GetChild(0).gameObject.SetActive(false);
                     }
                 }
-            }    
+            }  */  
         }
 
         private void CheckTemperatureInfo()

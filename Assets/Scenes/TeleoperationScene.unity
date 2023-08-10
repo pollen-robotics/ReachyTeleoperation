@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 224850607}
   - component: {fileID: 224850606}
   - component: {fileID: 224850609}
+  - component: {fileID: 224850610}
   m_Layer: 10
   m_Name: ReachyEyeViewQuad
   m_TagString: Untagged
@@ -924,6 +925,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f093a8021ce9bc443a5de613579a73ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &224850610
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224850604}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &258652890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2009,6 +2106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 803308015}
   - component: {fileID: 803308014}
+  - component: {fileID: 803308017}
   - component: {fileID: 803308016}
   m_Layer: 0
   m_Name: WebRTCManager
@@ -2052,12 +2150,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 803308013}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88d4fc661710a8338b1da36051e817e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 08a8e47efb2244a43bfa3f1b254ee4c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   room: teleop_stereo_video_robot_python_server
   screen: {fileID: 224850607}
+  outputAudioSource: {fileID: 0}
   image: {fileID: 2100000, guid: f39d5f55597dea84fab92dddfe424377, type: 2}
+  event_OnVideoRoomStatusHasChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &803308017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803308013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a8e47efb2244a43bfa3f1b254ee4c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  room: teleop_audio_robot_python_server
+  screen: {fileID: 0}
+  outputAudioSource: {fileID: 224850610}
+  image: {fileID: 0}
   event_OnVideoRoomStatusHasChanged:
     m_PersistentCalls:
       m_Calls: []

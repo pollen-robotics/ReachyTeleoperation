@@ -1,12 +1,19 @@
 using UnityEngine;
 using Unity.WebRTC;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class WebRTCAVReceiver : WebRTCBase
 {
     public Renderer screen;
     public AudioSource outputAudioSource;
     private MediaStream _receiveStream;
+
+    private bool isRobotInRoom = true;
+    public Material image;
+        
+    public UnityEvent<bool> event_OnVideoRoomStatusHasChanged;
+
 
     /*protected override void Start()
     {
@@ -37,8 +44,8 @@ public class WebRTCAVReceiver : WebRTCBase
                         Debug.LogWarning("Output audio is not assigned. Sound won't be rendered");
                 }
             };
-            //var transceiver = _pc.AddTransceiver(TrackKind.Video);
-            //transceiver.Direction = RTCRtpTransceiverDirection.RecvOnly;
+            var transceiver = _pc.AddTransceiver(TrackKind.Video);
+            transceiver.Direction = RTCRtpTransceiverDirection.RecvOnly;
         }
     }
 
@@ -46,12 +53,18 @@ public class WebRTCAVReceiver : WebRTCBase
     {
         if (e.Track is VideoStreamTrack video)
         {
+            isRobotInRoom = true;
+            event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
             video.OnVideoReceived += tex =>
             {
-                //if (e.Track.Id == "left")
-                screen.material.mainTexture = tex;
-                //else
-                //screen.material.SetTexture("_MainTex_right", tex);
+                if (e.Track.Id == "right"){
+                    Debug.LogError("right");
+                    image.SetTexture("_RightTex", tex);
+                }
+                else{
+                    Debug.LogError("left");
+                    image.SetTexture("_LeftTex", tex);
+                }
             };
         }
         else if (e.Track is AudioStreamTrack audio)
@@ -62,4 +75,3 @@ public class WebRTCAVReceiver : WebRTCBase
         }
     }
 }
-
