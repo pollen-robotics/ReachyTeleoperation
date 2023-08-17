@@ -11334,4 +11334,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5633a71ce64bff42aa11d707725e671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlaneDistance: 0.8
+  PlaneDistance: 0.7
