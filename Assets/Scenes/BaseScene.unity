@@ -572,6 +572,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1906032142}
+    - target: {fileID: 1440600536123287010, guid: 770664eca1f4897479c79fc61a6ab5f5,
+        type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.015
+      objectReference: {fileID: 0}
     - target: {fileID: 1440600536123287011, guid: 770664eca1f4897479c79fc61a6ab5f5,
         type: 3}
       propertyPath: m_InteractionManager
