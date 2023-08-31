@@ -254,7 +254,7 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Fabien/Documents/pollen_robotics.keystore
+  AndroidKeystoreName: '{dedicated}: Documents/pollen_robotics.keystore'
   AndroidKeyaliasName: teleopapp
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
