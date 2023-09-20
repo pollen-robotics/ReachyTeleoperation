@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using Unity.WebRTC;
-using WebSocketSharp;
 using UnityEngine;
 
 [RequireComponent(typeof(WebRTCService))]
 public abstract class WebRTCBase : MonoBehaviour
 {
     private string _signalingServerURL;
-    public string room = "teleop_stereo_video_robot_python_server";
-    protected string uid = "Unity";
     private Signaling _signaling;
 
     protected RTCPeerConnection _pc;
+
+    public bool _producer = false;
 
     private static RTCConfiguration _conf = new RTCConfiguration
     {
@@ -22,17 +21,18 @@ public abstract class WebRTCBase : MonoBehaviour
     private bool _gotOffer = false;
     private RTCSessionDescription _offer;
     private bool _gotAnswer = false;
+    private bool _offerSent = false;
     private RTCSessionDescription _answer;
     private ConcurrentQueue<RTCIceCandidate> _candidates = new ConcurrentQueue<RTCIceCandidate>();
 
     protected virtual void Awake()
     {
         //WebRTC.Initialize();
-        // string ip_address = "localhost"; //PlayerPrefs.GetString("ip_address");
+        string ip_address = PlayerPrefs.GetString("robot_ip");
         // string ip_address="192.168.1.126";
         // string ip_address="0.0.0.0";
-        string ip_address="192.168.1.217";
-        _signalingServerURL = "ws://" + ip_address + ":8080/ws";
+        //string ip_address = "192.168.1.108";
+        _signalingServerURL = "ws://" + ip_address + ":8443";
         Debug.Log("Signaling server URL: " + _signalingServerURL);
     }
 
@@ -42,10 +42,55 @@ public abstract class WebRTCBase : MonoBehaviour
         SignalingCall();
     }
 
+    void Update()
+    {
+#if !UNITY_WEBGL || UNITY_EDITOR
+        _signaling.UpdateMessages();
+#endif
+    }
+
     void OnDestroy()
     {
         WebRTCHangUp();
         _signaling?.Close();
+    }
+
+    void HandleConnectionStatus(ConnectionStatus status)
+    {
+        switch (status)
+        {
+            case ConnectionStatus.Waiting:
+                WebRTCHangUp();
+                break;
+
+            case ConnectionStatus.Ready:
+                WebRTCCall();
+                break;
+
+            case ConnectionStatus.Kicked:
+                Debug.LogWarning("Status not handled");
+                break;
+        }
+    }
+
+    void HandleOffer(RTCSessionDescription offer)
+    {
+        Debug.Log($"[WebRTC] Got offer {offer}");
+        _offer = offer;
+        _gotOffer = true;
+    }
+
+    void HandleAnswer(RTCSessionDescription answer)
+    {
+        Debug.Log($"[WebRTC] Got offer {answer}");
+        _answer = answer;
+        _gotAnswer = true;
+    }
+
+    void HandleICECandidate(RTCIceCandidate candidate)
+    {
+        Debug.Log($"[WebRTC] Got remote ICECandidate {candidate}");
+        _candidates.Enqueue(candidate);
     }
 
     void SignalingCall()
@@ -54,44 +99,17 @@ public abstract class WebRTCBase : MonoBehaviour
         {
             throw new System.Exception();
         }
-        _signaling = new Signaling(_signalingServerURL, room, uid, "operator");// PlayerPrefs.GetString("robot_uid"));
+        _signaling = new Signaling(_signalingServerURL, _producer);
 
-        _signaling.OnRoomStatus += (sender, e) =>
-        {
-            switch (e.RoomStatus)
-            {
-                case RoomStatus.Waiting:
-                    WebRTCHangUp();
-                    break;
+        _signaling.event_OnConnectionStatus.AddListener(HandleConnectionStatus);
 
-                case RoomStatus.Ready:
-                    WebRTCCall();
-                    break;
+        _signaling.event_OnOffer.AddListener(HandleOffer);
 
-                case RoomStatus.Kicked:
-                    break;
-            }
-        };
-        _signaling.OnOffer += (sender, e) =>
-        {
-            Debug.Log($"[WebRTC] Got offer {e.Offer}");
+        _signaling.event_OnAnswer.AddListener(HandleAnswer);
 
-            _offer = e.Offer;
-            _gotOffer = true;
-        };
-        _signaling.OnAnswer += (sender, e) =>
-        {
-            Debug.Log($"[WebRTC] Got answer {e.Answer}");
+        _signaling.event_OnICECandidate.AddListener(HandleICECandidate);
+        _offerSent = false;
 
-            _answer = e.Answer;
-            _gotAnswer = true;
-        };
-        _signaling.OnICECandidate += (sender, e) =>
-        {
-            Debug.Log($"[WebRTC] Got remote ICECandidate {e.Candidate}");
-
-            _candidates.Enqueue(e.Candidate);
-        };
         _signaling.Connect();
     }
     protected virtual void WebRTCCall()
@@ -110,7 +128,8 @@ public abstract class WebRTCBase : MonoBehaviour
             {
                 Debug.Log($"[WebRTC] Got local IceCandidate {candidate}");
 
-                _signaling.SendICECandidate(candidate);
+                //some client needs to receive SDP before ice candidates (i.e. chrome)
+                StartCoroutine(SendICECandidate(candidate));
             };
             _pc.OnIceConnectionChange = (status) =>
             {
@@ -120,16 +139,32 @@ public abstract class WebRTCBase : MonoBehaviour
             {
                 Debug.Log($"[WebRTC] OnIceGatheringStateChange {status}");
             };
-            _pc.OnNegotiationNeeded = () =>
+            /*_pc.OnNegotiationNeeded = () =>
             {
                 Debug.Log($"[WebRTC] OnNegotiationNeeded");
-            };
+            };*/
             /*_pc.OnNegotiationNeeded = () =>
             {
                 Debug.Log($"[WebRTC] OnNegotiationNeeded");
                 StartCoroutine(PeerNegotiationNeeded(_pc));
             };*/
+            /*_pc.OnTrack = (evt) =>
+            {
+                Debug.Log($"[WebRTCAudioSender] OnTrack {evt.Track}");
+            };*/
         }
+    }
+
+    IEnumerator SendICECandidate(RTCIceCandidate candidate)
+    {
+        //send ice after sdp
+        while (!_offerSent)
+        {
+            Debug.Log("Wait for sdp to complete");
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        _signaling.SendICECandidate(candidate);
     }
 
     protected virtual void WebRTCHangUp()
@@ -162,10 +197,13 @@ public abstract class WebRTCBase : MonoBehaviour
                 RTCIceCandidate candidate;
                 if (_candidates.TryDequeue(out candidate))
                 {
-                    var newCandidate_pc = _pc.AddIceCandidate(candidate);
-                    yield return newCandidate_pc;
+                    if (_pc != null)
+                    {
+                        var newCandidate_pc = _pc.AddIceCandidate(candidate);
+                        yield return newCandidate_pc;
 
-                    Debug.Log($"[WebRTC] Adding remote candidate {candidate}");
+                        Debug.Log($"[WebRTC] Adding remote candidate {candidate}");
+                    }
                 }
                 else
                 {
@@ -190,6 +228,8 @@ public abstract class WebRTCBase : MonoBehaviour
         Debug.Log($"[WebRTC] Set anwer as local desc {localDesc}");
 
         _signaling.SendLocalDescription(_pc.LocalDescription);
+        _offerSent = true;
+        //_signaling.SendLocalDescription(answerDesc);
     }
     IEnumerator WebRTCGotAnswer(RTCSessionDescription answer)
     {
@@ -199,7 +239,7 @@ public abstract class WebRTCBase : MonoBehaviour
         Debug.Log($"[WebRTC] Set answer as remote desc {remoteDesc}");
     }
 
-    IEnumerator PeerNegotiationNeeded(RTCPeerConnection pc)
+    protected IEnumerator PeerNegotiationNeeded(RTCPeerConnection pc)
     {
         var op = pc.CreateOffer();
         yield return op;
@@ -234,8 +274,9 @@ public abstract class WebRTCBase : MonoBehaviour
             var error = op.Error;
             OnSetSessionDescriptionError(ref error);
         }
-
-        _signaling.SendLocalDescription(pc.LocalDescription);
+        Debug.Log($"[WebRTC] Create offer {pc.LocalDescription}");
+        _signaling.SendLocalDescription(pc.LocalDescription, "offer");
+        _offerSent = true;
     }
 
     private void OnSetLocalSuccess(RTCPeerConnection pc)

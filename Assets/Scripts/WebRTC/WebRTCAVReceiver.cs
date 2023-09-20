@@ -9,20 +9,14 @@ public class WebRTCAVReceiver : WebRTCBase
     public AudioSource outputAudioSource;
     private MediaStream _receiveStream;
 
-    private bool isRobotInRoom = true;
-    public Material image;
-        
+    private string right_track_id_name = "";
+
     public UnityEvent<bool> event_OnVideoRoomStatusHasChanged;
-
-
-    /*protected override void Start()
-    {
-        base.Start();
-    }*/
 
     protected override void WebRTCCall()
     {
         base.WebRTCCall();
+        right_track_id_name = "";
         _receiveStream = new MediaStream();
         _receiveStream.OnAddTrack += OnAddTrack;
         if (_pc != null)
@@ -33,9 +27,13 @@ public class WebRTCAVReceiver : WebRTCBase
 
                 if (evt.Track.Kind == TrackKind.Video)
                 {
+                    //right track is received before left
+                    if (right_track_id_name == "")
+                        right_track_id_name = evt.Track.Id;
                     _receiveStream.AddTrack(evt.Track);
                     if (screen == null)
                         Debug.LogError("Screen is not assigned. Image won't be rendered");
+                    event_OnVideoRoomStatusHasChanged.Invoke(true);
                 }
                 else if (evt.Track.Kind == TrackKind.Audio)
                 {
@@ -53,25 +51,24 @@ public class WebRTCAVReceiver : WebRTCBase
     {
         if (e.Track is VideoStreamTrack video)
         {
-            isRobotInRoom = true;
-            event_OnVideoRoomStatusHasChanged.Invoke(isRobotInRoom);
             video.OnVideoReceived += tex =>
             {
-                if (e.Track.Id == "right"){
-                    Debug.LogError("right");
-                    image.SetTexture("_RightTex", tex);
+                if (e.Track.Id == right_track_id_name)
+                {
+                    screen.material.SetTexture("_RightTex", tex);
                 }
-                else{
-                    Debug.LogError("left");
-                    image.SetTexture("_LeftTex", tex);
-                }
+                else
+                    screen.material.SetTexture("_LeftTex", tex);
             };
         }
         else if (e.Track is AudioStreamTrack audio)
         {
+            Debug.Log("playing audio track");
+            outputAudioSource.Stop();
             outputAudioSource.SetTrack(audio);
             outputAudioSource.loop = true;
             outputAudioSource.Play();
         }
     }
 }
+

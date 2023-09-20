@@ -1,318 +1,322 @@
 using System;
 using UnityEngine;
-
+using System.Threading;
 using Unity.WebRTC;
+using NativeWebSocket;
+using System.Linq;
+using UnityEngine.Events;
 
-using WebSocketSharp;
 
-public enum RoomStatus
+public enum ConnectionStatus
 {
     Waiting,
     Ready,
     Kicked,
 }
 
-public class RoomStatusEventArgs : EventArgs
+public enum SessionStatus
 {
-    private RoomStatus _status;
+    Asked,
+    Started,
+    Ended,
+}
 
-    public RoomStatusEventArgs(string status)
+public class MessageType
+{
+    private MessageType(string value) { Value = value; }
+
+    public string Value { get; private set; }
+
+    public static MessageType Welcome { get { return new MessageType("welcome"); } }
+    public static MessageType SetPeerStatus { get { return new MessageType("setPeerStatus"); } }
+    public static MessageType PeerStatusChanged { get { return new MessageType("peerStatusChanged"); } }
+    public static MessageType StartSession { get { return new MessageType("startSession"); } }
+    public static MessageType SessionStarted { get { return new MessageType("sessionStarted"); } }
+    public static MessageType SessionEnded { get { return new MessageType("endSession"); } }
+    public static MessageType Peer { get { return new MessageType("peer"); } }
+    public static MessageType List { get { return new MessageType("list"); } }
+    public override string ToString()
     {
-        switch (status)
-        {
-            case "waiting":
-                _status = RoomStatus.Waiting;
-                break;
-
-            case "ready":
-                _status = RoomStatus.Ready;
-                break;
-
-            case "kicked":
-                _status = RoomStatus.Kicked;
-                break;
-
-            default:
-                throw new ArgumentException("Invalid status value", status);
-        }
-    }
-
-    public RoomStatus RoomStatus
-    {
-        get
-        {
-            return _status;
-        }
+        return Value;
     }
 }
 
-public class OfferEventArgs : EventArgs
+public class MessageRole
 {
-    private RTCSessionDescription _offer;
+    private MessageRole(string value) { Value = value; }
 
-    public OfferEventArgs(RTCSessionDescription offer)
-    {
-        _offer = offer;
-    }
-    public RTCSessionDescription Offer
-    {
-        get
-        {
-            return _offer;
-        }
-    }
-}
+    public string Value { get; private set; }
 
-public class AnswerEventArgs : EventArgs
-{
-    private RTCSessionDescription _answer;
-
-    public AnswerEventArgs(RTCSessionDescription answer)
+    public static MessageRole Listener { get { return new MessageRole("listener"); } }
+    public static MessageRole Producer { get { return new MessageRole("producer"); } }
+    public static MessageRole Consumer { get { return new MessageRole("consumer"); } }
+    public override string ToString()
     {
-        _answer = answer;
-    }
-    public RTCSessionDescription Answer
-    {
-        get
-        {
-            return _answer;
-        }
-    }
-}
-
-public class ICECandidateEventArgs : EventArgs
-{
-    private RTCIceCandidate _candidate;
-
-    public ICECandidateEventArgs(RTCIceCandidate candidate)
-    {
-        _candidate = candidate;
-    }
-    public RTCIceCandidate Candidate
-    {
-        get
-        {
-            return _candidate;
-        }
+        return Value;
     }
 }
 
 public class Signaling
 {
     private WebSocket webSocket;
-    private string room;
-    private string robot_uid;
+    public UnityEvent<RTCSessionDescription> event_OnOffer;
+    public UnityEvent<RTCSessionDescription> event_OnAnswer;
 
-    public event EventHandler<RoomStatusEventArgs> OnRoomStatus;
-    public event EventHandler<OfferEventArgs> OnOffer;
-    public event EventHandler<AnswerEventArgs> OnAnswer;
-    public event EventHandler<ICECandidateEventArgs> OnICECandidate;
-    public event EventHandler OnServerDisconnection;
-    public event EventHandler OnServerConnection;
+    public UnityEvent<RTCIceCandidate> event_OnICECandidate;
 
-    public Signaling(string url, string room, string robot_uid, string role)
+    public UnityEvent<ConnectionStatus> event_OnConnectionStatus;
+
+    private string _peer_id;
+    private string _session_id;
+
+    private SessionStatus sessionStatus;
+    private Thread askForList_thread;
+    private bool thread_running;
+
+    public Signaling(string url, bool producer)
     {
+        event_OnConnectionStatus = new UnityEvent<ConnectionStatus>();
+        event_OnOffer = new UnityEvent<RTCSessionDescription>();
+        event_OnAnswer = new UnityEvent<RTCSessionDescription>();
+        event_OnICECandidate = new UnityEvent<RTCIceCandidate>();
+        sessionStatus = SessionStatus.Ended;
         webSocket = new WebSocket(url);
-        this.room = room;
-        this.robot_uid = robot_uid;
 
-        webSocket.EmitOnPing = true;
-
-        webSocket.OnOpen += (sender, e) =>
+        webSocket.OnOpen += () =>
         {
-            JoinRoom(role);
-            ServerConnection(EventArgs.Empty);
+            if (producer)
+                SendMessage(MessageType.SetPeerStatus, MessageRole.Producer);
+            else
+                SendMessage(MessageType.SetPeerStatus, MessageRole.Listener);
         };
-        webSocket.OnMessage += (sender, e) =>
+        webSocket.OnMessage += (bytes) =>
         {
-            if (e.IsText)
+            var message = System.Text.Encoding.UTF8.GetString(bytes);
+            Debug.LogWarning(message);
+            if (message != null)
             {
-                var msg = JsonUtility.FromJson<SignalingMessage>(e.Data);
-                Debug.LogWarning(e.Data);
-                if (msg.room_status != null && msg.room_status != "")
-                {
-                    OnRoomStatus.Invoke(this, new RoomStatusEventArgs(msg.room_status));
-                }
-                else if (msg.signaling != null)
-                {
-                    if (msg.signaling.type == "offer")
-                    {
-                        var offer = new RTCSessionDescription
-                        {
-                            type = RTCSdpType.Offer,
-                            sdp = msg.signaling.sdp,
-                        };
-                        OnOffer?.Invoke(this, new OfferEventArgs(offer));
+                var msg = JsonUtility.FromJson<SignalingMessage>(message);
 
-                    }
-                    else if (msg.signaling.type == "answer")
+                if (msg.type == MessageType.Welcome.ToString())
+                {
+                    _peer_id = msg.peerId;
+                    event_OnConnectionStatus.Invoke(ConnectionStatus.Waiting);
+                    Debug.Log("peer id : " + _peer_id);
+                    if (!producer)
                     {
-                        var answer = new RTCSessionDescription
+                        askForList_thread = new Thread(new ThreadStart(AskList));
+                        askForList_thread.Start();
+                    }
+                }
+                else if (msg.type == MessageType.PeerStatusChanged.ToString())
+                {
+                    Debug.Log(msg.ToString());
+                    if (msg.meta?.name == "robot" && msg.roles.Contains(MessageRole.Producer.ToString()))
+                    {
+                        SendStartSession(msg.peerId);
+                    }
+                }
+                else if (sessionStatus == SessionStatus.Ended && msg.type == MessageType.List.ToString())
+                {
+                    Debug.Log("processing list..");
+                    foreach (var p in msg.producers)
+                    {
+                        if (p.meta.name == "robot")
                         {
-                            type = RTCSdpType.Answer,
-                            sdp = msg.signaling.sdp,
-                        };
-                        OnAnswer?.Invoke(this, new AnswerEventArgs(answer));
+                            SendStartSession(p.id);
+                            break;
+                        }
                     }
-                    else if (msg.signaling.candidate != null)
+                }
+                else if (msg.type == MessageType.StartSession.ToString())
+                {
+                    _session_id = msg.sessionId;
+                    event_OnConnectionStatus.Invoke(ConnectionStatus.Ready);
+                }
+                else if (msg.type == MessageType.SessionStarted.ToString())
+                {
+                    _session_id = msg.sessionId;
+                    Debug.Log("session id: " + _session_id);
+                    Debug.Log("Session started. peer id:" + msg.peerId + " session id:" + msg.sessionId);
+                    event_OnConnectionStatus.Invoke(ConnectionStatus.Ready);
+                    sessionStatus = SessionStatus.Started;
+                }
+                else if (msg.type == MessageType.SessionEnded.ToString())
+                {
+                    _session_id = null;
+                    Debug.Log("session ended: " + msg.sessionId);
+
+                    event_OnConnectionStatus.Invoke(ConnectionStatus.Waiting);
+                    sessionStatus = SessionStatus.Ended;
+                }
+                else if (msg.type == MessageType.Peer.ToString())
+                {
+                    if (msg.ice.IsValid())
                     {
+                        Debug.Log("received ice candidate");
                         RTCIceCandidate candidate = new RTCIceCandidate(
                             new RTCIceCandidateInit
                             {
-                                candidate = msg.signaling.candidate.candidate,
-                                sdpMid = msg.signaling.candidate.sdpMid,
-                                sdpMLineIndex = msg.signaling.candidate.sdpMLineIndex,
+                                candidate = msg.ice.candidate,
+                                sdpMid = msg.ice.sdpMid,
+                                sdpMLineIndex = msg.ice.sdpMLineIndex,
                             }
                         );
-                        OnICECandidate?.Invoke(this, new ICECandidateEventArgs(candidate));
+                        event_OnICECandidate.Invoke(candidate);
                     }
-                    else
+                    else if (msg.sdp.IsValid())
                     {
-                        Debug.LogWarning("here");
-                        throw new ArgumentException("Unknown signaling message", e.Data);
+                        if (msg.sdp.type == "offer")
+                        {
+                            Debug.Log("received offer");
+                            var offer = new RTCSessionDescription
+                            {
+                                type = RTCSdpType.Offer,
+                                sdp = msg.sdp.sdp,
+                            };
+                            event_OnOffer.Invoke(offer);
+                        }
+                        else if (msg.sdp.type == "answer")
+                        {
+                            var answser = new RTCSessionDescription
+                            {
+                                type = RTCSdpType.Answer,
+                                sdp = msg.sdp.sdp,
+                            };
+                            event_OnAnswer.Invoke(answser);
+                        }
                     }
                 }
+
                 else
                 {
-                    Debug.LogError("Unrecognized message !");
+                    Debug.LogError("Unrecognized message !" + sessionStatus);
                 }
             }
         };
-        webSocket.OnError += (sender, e) =>
+        webSocket.OnError += (e) =>
+            {
+                Debug.LogError($"WS error {e}");
+            };
+        webSocket.OnClose += (e) =>
         {
-            Debug.LogError($"WS error {e} : {e.Message}");
-            ServerDisconnection(EventArgs.Empty);
-        };
-        webSocket.OnClose += (sender, e) =>
-        {
-            Debug.Log($"WS {this.room} closed");
-            ServerDisconnection(EventArgs.Empty);
+            Debug.Log($"WS closed");
         };
     }
     public void Connect()
     {
-        webSocket.ConnectAsync();
+        webSocket.Connect();
+    }
+
+    public void UpdateMessages()
+    {
+        webSocket.DispatchMessageQueue();
     }
     public void Close()
     {
-        if (webSocket.IsAlive)
-        {
-            LeaveRoom();
-        }
+        thread_running = false;
+        if (askForList_thread != null && askForList_thread.IsAlive)
+            askForList_thread.Join();
         webSocket.Close();
     }
-    public void SendLocalDescription(RTCSessionDescription desc)
+    public async void SendLocalDescription(RTCSessionDescription desc, string type = "answer")
     {
-        var msg = JsonUtility.ToJson(new SignalingMessage
+        string msg = JsonUtility.ToJson(new SDPMessage
         {
-            signaling = new SignalingData(desc)
-        });
-
-        webSocket.Send(msg);
-    }
-    public void SendICECandidate(RTCIceCandidate candidate)
-    {
-        var msg = JsonUtility.ToJson(new SignalingMessage
-        {
-            signaling = new SignalingData(candidate)
-        });
-        webSocket.Send(msg);
-    }
-    private void JoinRoom(string role)
-    {
-        Debug.Log("Joining room " + this.room);
-        string msg = JsonUtility.ToJson(new ActionJoinRoom
-        {
-            join_room = new Operator
+            type = MessageType.Peer.ToString(),
+            sessionId = _session_id,
+            sdp = new SdpMessage
             {
-                room = this.room,
-                uid = robot_uid,
-                role = role
-            }
+                type = type,
+                sdp = desc.sdp,
+            },
         });
-        webSocket.SendAsync(msg, null);
+        await webSocket.SendText(msg);
+        Debug.LogWarning(desc);
     }
-    private void LeaveRoom()
+    public async void SendICECandidate(RTCIceCandidate candidate)
     {
-        Debug.Log("Leaving room " + this.room);
-        string msg = JsonUtility.ToJson(new ActionLeaveRoom
+        string msg = JsonUtility.ToJson(new ICEMessage
         {
-            leave_room = new Operator
-            {
-                room = this.room,
-                uid = PlayerPrefs.GetString("robot_uid"),
-            }
+            type = MessageType.Peer.ToString(),
+            sessionId = _session_id,
+            ice = new ICECandidateMessage(candidate),
         });
-        webSocket.Send(msg);
+        await webSocket.SendText(msg);
     }
 
-    public virtual void ServerDisconnection(EventArgs e)
+    private async void AskList()
     {
-        EventHandler handler = OnServerDisconnection;
-        if (handler != null)
+        thread_running = true;
+        while (thread_running)
         {
-            handler(this, e);
+            if (sessionStatus == SessionStatus.Ended)
+            {
+                Debug.Log("Ask for list");
+                string msg = JsonUtility.ToJson(new SignalingMessage
+                {
+                    type = MessageType.List.ToString(),
+                });
+                await webSocket.SendText(msg);
+            }
+            Thread.Sleep(1000);
         }
     }
 
-    public virtual void ServerConnection(EventArgs e)
+    private async void SendMessage(MessageType type, MessageRole role)
     {
-        EventHandler handler = OnServerConnection;
-        if (handler != null)
+        Debug.Log("SetPeerStatus");
+        string msg = JsonUtility.ToJson(new SignalingMessage
         {
-            handler(this, e);
-        }
+            type = type.ToString(),
+            roles = new string[] { role.ToString() },
+        });
+        await webSocket.SendText(msg);
+    }
+
+    private async void SendStartSession(string peer_id)
+    {
+        Debug.Log("StartSessionMessage");
+        string msg = JsonUtility.ToJson(new StartSessionMessage
+        {
+            type = MessageType.StartSession.ToString(),
+            roles = new string[] { MessageRole.Consumer.ToString() },
+            peerId = peer_id,
+        });
+        await webSocket.SendText(msg);
+        sessionStatus = SessionStatus.Asked;
     }
 }
 
+//Class used for building json messages
+
 [System.Serializable]
-class Operator
+class Meta
 {
-    public string room;
-    public string role = "operator";
-    public string uid;
+    public string name = "UnityClient";
 }
 
 [System.Serializable]
-class ActionJoinRoom
+class Producer
 {
-    public Operator join_room;
+    public string id;
+    public Meta meta;
 }
 
 [System.Serializable]
-class ActionLeaveRoom
-{
-    public Operator leave_room;
-}
-
-[System.Serializable]
-class SignalingData
+class SdpMessage
 {
     public string type;
     public string sdp;
-    public ICECandidateMessage candidate;
 
-    public SignalingData(RTCSessionDescription desc)
+    public bool IsValid()
     {
-        switch (desc.type)
-        {
-            case RTCSdpType.Offer:
-                type = "offer";
-                break;
-
-            case RTCSdpType.Answer:
-                type = "answer";
-                break;
-
-            default:
-                throw new ArgumentException("Unsupported RTCSessionDescription type");
-        }
-        sdp = desc.sdp;
+        return sdp != default(string);
     }
-    public SignalingData(RTCIceCandidate candidate)
+
+    public override string ToString()
     {
-        this.type = "icecandidate";
-        this.candidate = new ICECandidateMessage(candidate);
+        return String.Format("{0} : {1}", type, sdp);
     }
 }
 
@@ -331,11 +335,52 @@ class ICECandidateMessage
         this.sdpMLineIndex = candidate.SdpMLineIndex ?? 0;
         this.usernameFragment = candidate.UserNameFragment;
     }
+
+    public bool IsValid()
+    {
+        return candidate != default(string);
+    }
 }
 
 [System.Serializable]
 class SignalingMessage
 {
-    public string room_status;
-    public SignalingData signaling;
+    public string type;
+    public string peerId;
+    public string sessionId;
+    public Meta meta;
+    public string[] roles;
+    public ICECandidateMessage ice;
+    public SdpMessage sdp;
+    public Producer[] producers;
+
+    public override string ToString()
+    {
+        return String.Format("{0} : {1} : {2} : {3}", type, peerId, meta, roles);
+    }
+
+}
+
+[System.Serializable]
+class SDPMessage
+{
+    public string type;
+    public string sessionId;
+    public SdpMessage sdp;
+}
+
+[System.Serializable]
+class ICEMessage
+{
+    public string type;
+    public string sessionId;
+    public ICECandidateMessage ice;
+}
+
+[System.Serializable]
+class StartSessionMessage
+{
+    public string type;
+    public string peerId;
+    public string[] roles;
 }
