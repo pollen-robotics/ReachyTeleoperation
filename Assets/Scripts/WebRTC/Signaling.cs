@@ -338,7 +338,8 @@ class ICECandidateMessage
 
     public bool IsValid()
     {
-        return candidate != default(string);
+        //ignore null ice candidate. Ongoing patch with Unity
+        return candidate != default(string) && candidate != "";
     }
 }
 
