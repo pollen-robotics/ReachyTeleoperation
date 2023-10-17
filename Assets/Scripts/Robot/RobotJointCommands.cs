@@ -60,8 +60,8 @@ namespace TeleopReachy
 
         private void SetRobotSmoothlyCompliant()
         {
-            // Debug.Log("[RobotJointCommands]: SetRobotSmoothlyCompliant");
-            // setSmoothCompliance = StartCoroutine(SmoothCompliance(2));
+            Debug.Log("[RobotJointCommands]: SetRobotSmoothlyCompliant");
+            setSmoothCompliance = StartCoroutine(SmoothCompliance(2));
         }
 
         private void SetRobotStiff()
@@ -133,8 +133,8 @@ namespace TeleopReachy
 
         private void SetRobotCompliant()
         {
-            // ToggleStiffness();
-            // robotStatus.SetRobotCompliant(true);
+            ToggleStiffness();
+            robotStatus.SetRobotCompliant(true);
         }
 
         //partName should be l_, r_ or neck_
