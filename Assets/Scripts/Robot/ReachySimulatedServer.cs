@@ -241,7 +241,7 @@ public class ReachySimulatedServer : MonoBehaviour
                 jointCommandList.Add(new JointCommand
                 {
                     Id = new JointId { Name = "neck_yaw" },
-                    GoalPosition = (float?)neck_commands[1],
+                    GoalPosition = -(float?)neck_commands[1],
                 });
             }
 

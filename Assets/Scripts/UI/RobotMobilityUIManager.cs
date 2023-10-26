@@ -17,16 +17,11 @@ namespace TeleopReachy
         private UserMobilityInput userMobilityInput = null;
         private RobotStatus robotStatus;
         private RobotConfig robotConfig;
-        private Transform userTracker;
 
         private ConnectionStatus connectionStatus;
 
-
         private Vector2 directionLeft;
         private Vector2 directionRight;
-
-        private bool isStatic;
-        private bool isRotating;
 
         private bool ShowMobilityUIListenerSet = false;
         private bool HideMobilityUIListenerSet = false;
@@ -80,15 +75,16 @@ namespace TeleopReachy
         {
             if (!on)
             {
+                userMobilityInput = null;
                 ShowMobilityUIListenerSet = false;
                 HideMobilityUIListenerSet = false;
                 robotStatus.event_OnStartTeleoperation.RemoveListener(ShowMobilityUI);
                 robotStatus.event_OnStopTeleoperation.RemoveListener(HideMobilityUI);
+                HideMobilityUI();
             }
             else
             {
                 userMobilityInput = UserInputManager.Instance.UserMobilityInput;
-                userTracker = UserTrackerManager.Instance.transform;
 
                 if (ShowMobilityUIListenerSet == false)
                 {
@@ -101,20 +97,18 @@ namespace TeleopReachy
                     HideMobilityUIListenerSet = true;
                 }
             }
-
-            HideMobilityUI();
         }
 
         void Update()
         {
-            //not initializd yet.
+            //not initialized yet.
             if (userMobilityInput == null)
                 return;
 
             float orbita_yaw = -reachyController.headOrientation[2];
             if (orbita_yaw > 180)
             {
-                orbita_yaw = orbita_yaw - 360;
+                orbita_yaw -= 360;
             }
             float x_pos = Mathf.Abs(orbita_yaw * 4) < 360 ? orbita_yaw * 4 : (orbita_yaw > 0 ? 360 - Mathf.Abs(360 - Mathf.Abs(orbita_yaw * 4)) : -360 + Mathf.Abs(-360 + Mathf.Abs(orbita_yaw * 4)));
             arrow.parent.localPosition = new Vector3(-x_pos, 0, 0);
@@ -163,7 +157,6 @@ namespace TeleopReachy
         private void ShowMobilityUI()
         {
             transform.ActivateChildren(true);
-            IsRobotStatic(true);
             arrowRightRotationCommand.gameObject.SetActive(false);
             arrowLeftRotationCommand.gameObject.SetActive(false);
         }

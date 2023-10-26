@@ -214,7 +214,7 @@ namespace Reachy
                 if (motorName == "neck_yaw")
                 {
                     containNeckCommand = true;
-                    headOrientation[2] = kvp.Value;
+                    headOrientation[2] = -kvp.Value;
                 }
             }
 

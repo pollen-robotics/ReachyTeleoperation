@@ -11,7 +11,6 @@ namespace TeleopReachy
     {
         private UnityEngine.Quaternion initialRotation;
         private HeadIKRequest headTarget;
-        private UnityEngine.Quaternion headLocalRot; // TO FIX
 
         void Update()
         {
@@ -39,12 +38,6 @@ namespace TeleopReachy
         public HeadIKRequest GetHeadTarget()
         {
             return headTarget;
-        }
-
-        public UnityEngine.Quaternion GetHeadLocalRotation()
-        {
-            //TO FIX
-            return headLocalRot;
         }
     }
 }
