@@ -9,14 +9,14 @@ public class WebRTCAVReceiver : WebRTCBase
     public AudioSource outputAudioSource;
     private MediaStream _receiveStream;
 
-    private string right_track_id_name = "";
+    private string left_track_id_name = "";
 
     public UnityEvent<bool> event_OnVideoRoomStatusHasChanged;
 
     protected override void WebRTCCall()
     {
         base.WebRTCCall();
-        right_track_id_name = "";
+        left_track_id_name = "";
         _receiveStream = new MediaStream();
         _receiveStream.OnAddTrack += OnAddTrack;
         if (_pc != null)
@@ -27,9 +27,9 @@ public class WebRTCAVReceiver : WebRTCBase
 
                 if (evt.Track.Kind == TrackKind.Video)
                 {
-                    //right track is received before left
-                    if (right_track_id_name == "")
-                        right_track_id_name = evt.Track.Id;
+                    //left track is received first
+                    if (left_track_id_name == "")
+                        left_track_id_name = evt.Track.Id;
                     _receiveStream.AddTrack(evt.Track);
                     if (screen == null)
                         Debug.LogError("Screen is not assigned. Image won't be rendered");
@@ -53,12 +53,15 @@ public class WebRTCAVReceiver : WebRTCBase
         {
             video.OnVideoReceived += tex =>
             {
-                if (e.Track.Id == right_track_id_name)
+                if (e.Track.Id == left_track_id_name)
+                {
+                    screen.material.SetTexture("_LeftTex", tex);
+
+                }
+                else
                 {
                     screen.material.SetTexture("_RightTex", tex);
                 }
-                else
-                    screen.material.SetTexture("_LeftTex", tex);
             };
         }
         else if (e.Track is AudioStreamTrack audio)
