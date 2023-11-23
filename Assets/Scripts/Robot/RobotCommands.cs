@@ -73,7 +73,7 @@ namespace TeleopReachy
             if (robotConfig.IsVirtual() || robotConfig.HasLeftGripper() && robotStatus.IsLeftArmOn())
             {
                 var jointCom = new JointCommand();
-                jointCom.Id = new JointId { Name = "l_gripper" };
+                jointCom.Id = new JointId { Name = "l_gripper_finger" };
                 jointCom.GoalPosition = leftGripperOpening;
 
                 grippersCommand.Add(jointCom);
@@ -82,7 +82,7 @@ namespace TeleopReachy
             if (robotConfig.IsVirtual() || robotConfig.HasRightGripper() && robotStatus.IsRightArmOn())
             {
                 var jointCom = new JointCommand();
-                jointCom.Id = new JointId { Name = "r_gripper" };
+                jointCom.Id = new JointId { Name = "r_gripper_finger" };
                 jointCom.GoalPosition = rightGripperOpening;
 
                 grippersCommand.Add(jointCom);

@@ -137,7 +137,8 @@ namespace TeleopReachy
 
             if (!robotStatus.IsGraspingLockActivated())
             {
-                pos_right_gripper = Mathf.Deg2Rad * (handsTracker.rightHand.trigger * 30 - 50 * (1 - handsTracker.rightHand.trigger));
+                // pos_right_gripper = Mathf.Deg2Rad * (handsTracker.rightHand.trigger * 30 - 50 * (1 - handsTracker.rightHand.trigger));
+                pos_right_gripper = Mathf.Deg2Rad * ((1-handsTracker.rightHand.trigger) * -140+10);
                 //set correct gripper status 
                 if (handsTracker.rightHand.trigger > 0.5)
                     right_gripper_closed = true;
@@ -178,7 +179,8 @@ namespace TeleopReachy
 
             if (!robotStatus.IsGraspingLockActivated())
             {
-                pos_left_gripper = Mathf.Deg2Rad * (-(handsTracker.leftHand.trigger * 20 - 50 * (1 - handsTracker.leftHand.trigger)));
+                // pos_left_gripper = Mathf.Deg2Rad * (-(handsTracker.leftHand.trigger * 20 - 50 * (1 - handsTracker.leftHand.trigger)));
+                pos_left_gripper = Mathf.Deg2Rad * ((1-handsTracker.leftHand.trigger) * -140-10);
                 //set correct gripper status 
                 if (handsTracker.leftHand.trigger > 0.5)
                     left_gripper_closed = true;
