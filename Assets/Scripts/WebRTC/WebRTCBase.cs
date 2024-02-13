@@ -29,7 +29,7 @@ public abstract class WebRTCBase : MonoBehaviour
     {
         //WebRTC.Initialize();
         string ip_address = PlayerPrefs.GetString("robot_ip");
-        // string ip_address="192.168.1.126";
+        //string ip_address = "10.0.1.36";
         // string ip_address="0.0.0.0";
         //string ip_address = "192.168.1.108";
         _signalingServerURL = "ws://" + ip_address + ":8443";
